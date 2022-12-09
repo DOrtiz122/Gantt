@@ -12,6 +12,12 @@ import HighchartsReact from 'highcharts-react-official';
 // Sigma packages
 import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
 
+// configure this for sigma
+client.config.configureEditorPanel([
+  { name: "source", type: "element" },
+  { name: "dimension", type: "column", source: "source", allowMultiple: true },
+  { name: "measures", type: "column", source: "source", allowMultiple: true },
+]);
 
 // Set to 00:00:00:000 today
 var today = new Date(),
@@ -21,10 +27,10 @@ var today = new Date(),
     cars;
 
 // Set to 00:00:00:000 today
-today.setUTCHours(0);
-today.setUTCMinutes(0);
-today.setUTCSeconds(0);
-today.setUTCMilliseconds(0);
+// today.setUTCHours(0);
+// today.setUTCMinutes(0);
+// today.setUTCSeconds(0);
+// today.setUTCMilliseconds(0);
 today = today.getTime();
 
 
@@ -145,19 +151,8 @@ const App = () => {
           }
       }
   },
-  title: {
-      text: 'Car Rental Schedule'
-  },
   tooltip: {
-      pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span>'
-  },
-  lang: {
-      accessibility: {
-          axis: {
-              xAxisDescriptionPlural: 'The chart has a two-part X axis showing time in both week numbers and days.',
-              yAxisDescriptionSingular: 'The chart has a tabular Y axis showing a data table row for each point.'
-          }
-      }
+      pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
   },
   accessibility: {
       keyboardNavigation: {
@@ -166,7 +161,7 @@ const App = () => {
           }
       },
       point: {
-          valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e} to {point.x2:%A, %B %e}.'
+          valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e %I:%M} to {point.x2:%A, %B %e %I:%M}.'
       },
       series: {
           descriptionFormatter: function (series) {
@@ -174,6 +169,7 @@ const App = () => {
           }
       }
   },
+  // This below keeps an indicator line for the current time
   xAxis: {
       currentDateIndicator: true
   },
@@ -182,7 +178,7 @@ const App = () => {
       grid: {
           columns: [{
               title: {
-                  text: 'Model'
+                  text: 'Work Order'
               },
               categories: series.map(function (s) {
                   return s.name;
@@ -200,13 +196,6 @@ const App = () => {
               },
               categories: series.map(function (s) {
                   return dateFormat('%e. %b', s.current.from);
-              })
-          }, {
-              title: {
-                  text: 'To'
-              },
-              categories: series.map(function (s) {
-                  return dateFormat('%e. %b', s.current.to);
               })
           }]
       }
