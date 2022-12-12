@@ -10,7 +10,7 @@ import Highcharts from 'highcharts/highcharts-gantt';
 import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
-import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
+import { client, useConfig, useElementColumns, useElementData } from "@sigmacomputing/plugin";
 
 // configure this for sigma
 client.config.configureEditorPanel([
@@ -171,9 +171,99 @@ const App = () => {
   console.log(sigmaData);
   console.log(series);
 
-  var sigmaObj = {
-    end_time: sigmaData[config.measures[0]]
-  }
+  const options = useMemo(() => {
+    const dimensions = config.dimension;
+    const measures = config.measures;
+
+    if (!(dimensions && measures)) return false;
+
+    // data object 
+    var sigmaObj = {
+      end_time: sigmaData[config.measures[0]]
+    }
+
+    // build data object first
+    const sigmaObjectBuilder = () => {
+      for (var i = 0; i < config.dimension.length; i++) {
+        var first_val = sigmaData[config.dimension[i]][0];
+        if (typeof first_val !== 'string') {
+          // this is start_times
+          sigmaObj.start_time = sigmaData[config.dimension[i]];
+        } else {
+          // it is either wono or operation
+          // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
+          // convert string # to int
+          var temp = parseInt(first_val);
+          if (first_val[0] === temp.toString()) {
+            // this is wono bc the values are the same before and after, meaning it was an int
+            sigmaObj.wono = sigmaData[config.dimension[i]];
+          } else {
+            // not the same before and after, therefor it was a string operation
+            sigmaObj.operation = sigmaData[config.dimension[i]];
+          }
+        }
+      }
+    }
+
+    if (sigmaData?.[dimensions[0]]) {
+      sigmaObjectBuilder();
+    }
+
+    console.log(sigmaObj)
+
+    const options = {
+      series: series,
+      tooltip: {
+        pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+      },
+      // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
+      navigator: {
+        enabled: true
+      },
+      scrollbar: {
+        enabled: true
+      },
+      rangeSelector: {
+        enabled: true,
+        selected: 0
+      },
+  
+      // This below keeps an indicator line for the current time
+      xAxis: {
+          currentDateIndicator: true
+      },
+      yAxis: {
+          type: 'category',
+          grid: {
+              columns: [{
+                  title: {
+                      text: 'Work Order'
+                  },
+                  categories: series.map(function (s) {
+                      return s.name;
+                  })
+              }, {
+                  title: {
+                      text: 'Current Stage'
+                  },
+                  categories: series.map(function (s) {
+                      return s.current.rentedTo;
+                  })
+              }, {
+                  title: {
+                      text: 'Start'
+                  },
+                  categories: series.map(function (s) {
+                      return dateFormat('%e. %b', s.current.from);
+                  })
+              }]
+          }
+      }
+    }
+  
+  }, [config, sigmaData]);
+
+
   // const end_times = sigmaData[config.measures[0]];
 
   // so end_times here should be exactly those end times we get inputted
@@ -188,119 +278,16 @@ const App = () => {
   // nice thing is these are in order so we shouldn't have to worry about lining these back up 
 
   
-  
-  for (var i = 0; i < config.dimension.length; i++) {
-    var first_val = sigmaData[config.dimension[i]];
-    console.log(first_val);
-    console.log(Array.isArray(first_val));
-    console.log(typeof first_val);
-
-    // if (typeof first_val['0'] !== 'string') {
-    //   // this is start_times
-    //   sigmaObj.start_time = sigmaData[config.dimension[i]];
-    // } else {
-    //   // it is either wono or operation
-    //   // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
-    //   // convert string # to int
-    //   var temp = parseInt(first_val[0]);
-    //   if (first_val[0] === temp.toString()) {
-    //     // this is wono bc the values are the same before and after, meaning it was an int
-    //     sigmaObj.wono = sigmaData[config.dimension[i]];
-    //   } else {
-    //     // not the same before and after, therefor it was a string operation
-    //     sigmaObj.operation = sigmaData[config.dimension[i]];
-    //   }
-    // }
-  }
-
-  console.log(sigmaObj);
-
-  const [options] = useState({
-    series: series,
-
-    // Below allows the name to be inserted into the bar itself. Not necessary for right now
-  //   plotOptions: {
-  //     series: {
-  //         dataLabels: {
-  //             enabled: true,
-  //             format: '{point.name}',
-  //             style: {
-  //                 fontWeight: 'normal'
-  //             }
-  //         }
-  //     }
-  // },
-  tooltip: {
-      pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
-  },
-  // accessibility: {
-  //     keyboardNavigation: {
-  //         seriesNavigation: {
-  //             mode: 'serialize'
-  //         }
-  //     },
-  //     point: {
-  //         valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e %I:%M} to {point.x2:%A, %B %e %I:%M}.'
-  //     },
-  //     series: {
-  //         descriptionFormatter: function (series) {
-  //             return series.name + ', car ' + (series.index + 1) + ' of ' + series.chart.series.length + '.';
-  //         }
-  //     }
-  // },
-
-
-  // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
-  navigator: {
-    enabled: true
-  },
-  scrollbar: {
-    enabled: true
-  },
-  rangeSelector: {
-    enabled: true,
-    selected: 0
-  },
-
-  // This below keeps an indicator line for the current time
-  xAxis: {
-      currentDateIndicator: true
-  },
-  yAxis: {
-      type: 'category',
-      grid: {
-          columns: [{
-              title: {
-                  text: 'Work Order'
-              },
-              categories: series.map(function (s) {
-                  return s.name;
-              })
-          }, {
-              title: {
-                  text: 'Current Stage'
-              },
-              categories: series.map(function (s) {
-                  return s.current.rentedTo;
-              })
-          }, {
-              title: {
-                  text: 'Start'
-              },
-              categories: series.map(function (s) {
-                  return dateFormat('%e. %b', s.current.from);
-              })
-          }]
-      }
-  }
-  })
-
   return (
-    <HighchartsReact
+    <div>
+      {options && 
+      <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
       options={options}
-    />
+    />}
+    </div>
+
   );
 };
 
