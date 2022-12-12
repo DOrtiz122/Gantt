@@ -191,7 +191,7 @@ const App = () => {
   console.log(sigmaData[config.dimension[0]]);
   for (var i = 0; i < config.dimension.length; i++) {
     var first_val = sigmaData[config.dimension[i]];
-    if (typeof first_val[0] !== 'string') {
+    if (typeof first_val['0'] !== 'string') {
       // this is start_times
       sigmaObj.start_time = sigmaData[config.dimension[i]];
     } else {
