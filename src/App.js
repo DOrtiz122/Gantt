@@ -189,25 +189,25 @@ const App = () => {
 
   
   console.log(sigmaData[config.dimension[0]]);
-  // for (var i = 0; i < config.dimension.length; i++) {
-  //   var first_val = sigmaData[config.dimension[i]][0];
-  //   if (typeof first_val !== 'string') {
-  //     // this is start_times
-  //     sigmaObj.start_time = sigmaData[config.dimension[i]];
-  //   } else {
-  //     // it is either wono or operation
-  //     // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
-  //     // convert string # to int
-  //     var temp = parseInt(first_val);
-  //     if (first_val === temp.toString()) {
-  //       // this is wono bc the values are the same before and after, meaning it was an int
-  //       sigmaObj.wono = sigmaData[config.dimension[i]];
-  //     } else {
-  //       // not the same before and after, therefor it was a string operation
-  //       sigmaObj.operation = sigmaData[config.dimension[i]];
-  //     }
-  //   }
-  // }
+  for (var i = 0; i < config.dimension.length; i++) {
+    var first_val = sigmaData[config.dimension[i]];
+    if (typeof first_val[0] !== 'string') {
+      // this is start_times
+      sigmaObj.start_time = sigmaData[config.dimension[i]];
+    } else {
+      // it is either wono or operation
+      // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
+      // convert string # to int
+      var temp = parseInt(first_val[0]);
+      if (first_val[0] === temp.toString()) {
+        // this is wono bc the values are the same before and after, meaning it was an int
+        sigmaObj.wono = sigmaData[config.dimension[i]];
+      } else {
+        // not the same before and after, therefor it was a string operation
+        sigmaObj.operation = sigmaData[config.dimension[i]];
+      }
+    }
+  }
 
   console.log(sigmaObj);
 
