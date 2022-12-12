@@ -159,41 +159,56 @@ const App = () => {
   // Sigma stuff
   const config = useConfig();
   const sigmaData = useElementData(config.source);
+  
+  // Config is the dimensions and measures we selected for the source. 
+  // They are hashed so i have to reference them in a really annoying manner by checking what is what and going from there.
+  // config.dimension is an array that I need to loop through.
+  // config.measures also an array of length 1. it contains the string value key for the end times. 
+  // The strategy here is to know for sure what one of these key values is, thanks to the hashing
   console.log(config);
+  
+  // sigmaData is the object of arrays that contain data. The key value is each one of the values from 
   console.log(sigmaData);
   console.log(series);
 
+  const end_times = sigmaData[config.measures[0]];
+
+  // so end_times here should be exactly those end times we get inputted
+  console.log(end_times);
+
   const [options] = useState({
     series: series,
-    plotOptions: {
-      series: {
-          dataLabels: {
-              enabled: true,
-              format: '{point.name}',
-              style: {
-                  fontWeight: 'normal'
-              }
-          }
-      }
-  },
+
+    // Below allows the name to be inserted into the bar itself. Not necessary for right now
+  //   plotOptions: {
+  //     series: {
+  //         dataLabels: {
+  //             enabled: true,
+  //             format: '{point.name}',
+  //             style: {
+  //                 fontWeight: 'normal'
+  //             }
+  //         }
+  //     }
+  // },
   tooltip: {
       pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
   },
-  accessibility: {
-      keyboardNavigation: {
-          seriesNavigation: {
-              mode: 'serialize'
-          }
-      },
-      point: {
-          valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e %I:%M} to {point.x2:%A, %B %e %I:%M}.'
-      },
-      series: {
-          descriptionFormatter: function (series) {
-              return series.name + ', car ' + (series.index + 1) + ' of ' + series.chart.series.length + '.';
-          }
-      }
-  },
+  // accessibility: {
+  //     keyboardNavigation: {
+  //         seriesNavigation: {
+  //             mode: 'serialize'
+  //         }
+  //     },
+  //     point: {
+  //         valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e %I:%M} to {point.x2:%A, %B %e %I:%M}.'
+  //     },
+  //     series: {
+  //         descriptionFormatter: function (series) {
+  //             return series.name + ', car ' + (series.index + 1) + ' of ' + series.chart.series.length + '.';
+  //         }
+  //     }
+  // },
 
 
   // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
