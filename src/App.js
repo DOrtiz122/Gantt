@@ -207,6 +207,8 @@ const App = () => {
     }
   }
 
+  console.log(sigmaObj);
+
   const [options] = useState({
     series: series,
 
