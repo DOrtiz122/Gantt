@@ -110,7 +110,7 @@ cars = [{
       to: today + 2 * day
   }, {
       rentedTo: 'Shane Long',
-      from: today - 3 * day,
+      from: today - 30 * day,
       to: today - 2 * day
   }, {
       rentedTo: 'Jack Coleman',
@@ -161,6 +161,7 @@ const App = () => {
   const sigmaData = useElementData(config.source);
   console.log(config);
   console.log(sigmaData);
+  console.log(series);
 
   const [options] = useState({
     series: series,
@@ -193,6 +194,20 @@ const App = () => {
           }
       }
   },
+
+
+  // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
+  navigator: {
+    enabled: true
+  },
+  scrollbar: {
+    enabled: true
+  },
+  rangeSelector: {
+    enabled: true,
+    selected: 0
+  },
+
   // This below keeps an indicator line for the current time
   xAxis: {
       currentDateIndicator: true
