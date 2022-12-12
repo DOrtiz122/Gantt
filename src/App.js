@@ -98,6 +98,8 @@ var input_gantt_data = {
   ]
 }
 
+// THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
+
 // cars array of objects
 cars = [{
   model: 'Nissan Leaf',
