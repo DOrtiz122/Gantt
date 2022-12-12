@@ -26,15 +26,77 @@ var today = new Date(),
     series,
     cars;
 
-// Set to 00:00:00:000 today
-// today.setUTCHours(0);
-// today.setUTCMinutes(0);
-// today.setUTCSeconds(0);
-// today.setUTCMilliseconds(0);
 today = today.getTime();
 console.log('HELLO');
 
-
+var input_gantt_data = {
+  operation: [
+    "CUT-CNC",
+    "FINAL INSPECTION",
+    "INPROCESS INSPECT",
+    "LABEL-PRINT",
+    "PACKAGING",
+    "QA_FAI",
+    "RINSE-ULTRASONIC",
+    "TEST-HE LEAK",
+    "WELD-UHP ORBITAL"
+  ],
+  wono: [
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304',
+    '001000205304'
+  ],
+  wono_start_datetime: [
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000, 
+    1665566604000
+  ],
+  op_start_datetime: [
+    1665578756000, 
+    1666289067000, 
+    1666192095000, 
+    1666193098000, 
+    1666273932000, 
+    1667323519000, 
+    1665599789000, 
+    1666192225000, 
+    1666191841000
+  ],
+  op_end_datetime: [
+    1665579897000, 
+    1666291831000, 
+    1666192129000, 
+    1666193403000, 
+    1666273967000, 
+    1668010223000, 
+    1665599932000, 
+    1666192314000, 
+    1666191879000
+  ],
+  op_duration: [
+    1141, 
+    2764, 
+    34, 
+    305, 
+    35, 
+    686704, 
+    143, 
+    89, 
+    38
+  ]
+}
 
 // cars array of objects
 cars = [{
@@ -67,54 +129,6 @@ cars = [{
   }, {
       rentedTo: 'Robert Sailor',
       from: today + 2 * day,
-      to: today + 6 * day
-  }]
-}, {
-  model: 'Volvo V60',
-  current: 0,
-  deals: [{
-      rentedTo: 'Mona Ricci',
-      from: today + 0 * day,
-      to: today + 3 * day
-  }, {
-      rentedTo: 'Jane Dockerman',
-      from: today + 3 * day,
-      to: today + 4 * day
-  }, {
-      rentedTo: 'Bob Shurro',
-      from: today + 6 * day,
-      to: today + 8 * day
-  }]
-}, {
-  model: 'Volkswagen Golf',
-  current: 0,
-  deals: [{
-      rentedTo: 'Hailie Marshall',
-      from: today - 1 * day,
-      to: today + 1 * day
-  }, {
-      rentedTo: 'Morgan Nicholson',
-      from: today - 3 * day,
-      to: today - 2 * day
-  }, {
-      rentedTo: 'William Harriet',
-      from: today + 2 * day,
-      to: today + 3 * day
-  }]
-}, {
-  model: 'Peugeot 208',
-  current: 0,
-  deals: [{
-      rentedTo: 'Harry Peterson',
-      from: today - 1 * day,
-      to: today + 2 * day
-  }, {
-      rentedTo: 'Emma Wilson',
-      from: today + 3 * day,
-      to: today + 4 * day
-  }, {
-      rentedTo: 'Ron Donald',
-      from: today + 5 * day,
       to: today + 6 * day
   }]
 }];
@@ -178,9 +192,9 @@ const App = () => {
       }
   },
   // This below keeps an indicator line for the current time
-  xAxis: {
-      currentDateIndicator: true
-  },
+  // xAxis: {
+  //     currentDateIndicator: true
+  // },
   yAxis: {
       type: 'category',
       grid: {
@@ -193,14 +207,14 @@ const App = () => {
               })
           }, {
               title: {
-                  text: 'Rented To'
+                  text: 'Current Stage'
               },
               categories: series.map(function (s) {
                   return s.current.rentedTo;
               })
           }, {
               title: {
-                  text: 'From'
+                  text: 'Start'
               },
               categories: series.map(function (s) {
                   return dateFormat('%e. %b', s.current.from);
