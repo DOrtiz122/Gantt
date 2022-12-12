@@ -192,9 +192,9 @@ const App = () => {
       }
   },
   // This below keeps an indicator line for the current time
-  // xAxis: {
-  //     currentDateIndicator: true
-  // },
+  xAxis: {
+      currentDateIndicator: true
+  },
   yAxis: {
       type: 'category',
       grid: {
