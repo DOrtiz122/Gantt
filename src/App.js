@@ -32,7 +32,7 @@ var today = new Date(),
 // today.setUTCSeconds(0);
 // today.setUTCMilliseconds(0);
 today = today.getTime();
-
+console.log('hello');
 
 // cars array of objects
 cars = [{
