@@ -172,7 +172,7 @@ const App = () => {
   console.log(series);
 
   var sigmaObj = {
-    end_time: sigmaData[config.measures[0]]
+    // end_time: sigmaData[config.measures[0]]
   }
   // const end_times = sigmaData[config.measures[0]];
 
