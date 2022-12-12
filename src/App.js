@@ -32,7 +32,9 @@ var today = new Date(),
 // today.setUTCSeconds(0);
 // today.setUTCMilliseconds(0);
 today = today.getTime();
-console.log('hello');
+console.log('HELLO');
+
+
 
 // cars array of objects
 cars = [{
@@ -137,6 +139,12 @@ series = cars.map(function (car, i) {
 });
 
 const App = () => {
+
+  // Sigma stuff
+  const config = useConfig();
+  const sigmaData = useElementData(config.source);
+  console.log(config);
+  console.log(sigmaData);
 
   const [options] = useState({
     series: series,
