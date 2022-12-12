@@ -171,10 +171,41 @@ const App = () => {
   console.log(sigmaData);
   console.log(series);
 
-  const end_times = sigmaData[config.measures[0]];
+  var sigmaObj = {
+    end_time: sigmaData[config.measures[0]]
+  }
+  // const end_times = sigmaData[config.measures[0]];
 
   // so end_times here should be exactly those end times we get inputted
-  console.log(end_times);
+  console.log(sigmaObj.end_time);
+
+
+  // Figure out which remaining 3 columns are which. Save these values to an array.
+  // var wonos, operation, start_times;
+  // look through config.dimension array to do this.
+  // ask if sigmaData[config.dimension[i]][0] is a string or int. if it is a string, it is either operation or wono. if it is not a string, it is start time
+  
+  // nice thing is these are in order so we shouldn't have to worry about lining these back up 
+  
+  for (var i = 0; i < config.dimension.length; i++) {
+    var first_val = sigmaData[config.dimension[i]][0];
+    if (typeof first_val !== 'string') {
+      // this is start_times
+      sigmaObj.start_time = sigmaData[config.dimension[i]];
+    } else {
+      // it is either wono or operation
+      // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
+      // convert string # to int
+      var temp = parseInt(first_val);
+      if (first_val === temp.toString()) {
+        // this is wono bc the values are the same before and after, meaning it was an int
+        sigmaObj.wono = sigmaData[config.dimension[i]];
+      } else {
+        // not the same before and after, therefor it was a string operation
+        sigmaObj.operation = sigmaData[config.dimension[i]];
+      }
+    }
+  }
 
   const [options] = useState({
     series: series,
