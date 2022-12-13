@@ -198,6 +198,8 @@ const App = () => {
       // push last newObj to the arr
       arr.push(newObj)
       // return output array
+
+      
       return arr;
     }
 
@@ -249,20 +251,6 @@ const App = () => {
                   },
                   // categories: sigmaSeries.map(function (s) {
                   //     return s.name;
-                  // })
-              }, {
-                  title: {
-                      text: 'Current Stage'
-                  },
-                  // categories: sigmaSeries.map(function (s) {
-                  //     return s.name;
-                  // })
-              }, {
-                  title: {
-                      text: 'Start'
-                  },
-                  // categories: sigmaSeries.map(function (s) {
-                  //     return dateFormat('%e. %b', s.start);
                   // })
               }]
           }
