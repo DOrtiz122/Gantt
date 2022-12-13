@@ -194,6 +194,8 @@ const App = () => {
           // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
           // convert string # to int
           var temp = parseInt(first_val);
+          console.log('temp to string ', temp.toString());
+          console.log('first val ', first_val[0]);
           if (first_val[0] === temp.toString()) {
             // this is wono bc the values are the same before and after, meaning it was an int
             sigmaObj.wono = sigmaData[config.dimension[i]];
