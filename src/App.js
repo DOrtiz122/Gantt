@@ -243,23 +243,23 @@ const App = () => {
                   title: {
                       text: 'Work Order'
                   },
-                  categories: sigmaSeries.map(function (s) {
-                      return s.name;
-                  })
+                  // categories: sigmaSeries.map(function (s) {
+                  //     return s.name;
+                  // })
               }, {
                   title: {
                       text: 'Current Stage'
                   },
-                  categories: sigmaSeries.map(function (s) {
-                      return s.name;
-                  })
+                  // categories: sigmaSeries.map(function (s) {
+                  //     return s.name;
+                  // })
               }, {
                   title: {
                       text: 'Start'
                   },
-                  categories: sigmaSeries.map(function (s) {
-                      return dateFormat('%e. %b', s.start);
-                  })
+                  // categories: sigmaSeries.map(function (s) {
+                  //     return dateFormat('%e. %b', s.start);
+                  // })
               }]
           }
       }
