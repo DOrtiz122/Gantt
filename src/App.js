@@ -280,6 +280,9 @@ const App = () => {
   
   return (
     <div>
+      <p>
+        Hello
+      </p>
       {options && 
       <HighchartsReact
       highcharts={Highcharts}
