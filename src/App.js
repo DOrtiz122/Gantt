@@ -84,12 +84,14 @@ series = cars.map(function (car, i) {
   };
 });
 
+var sigmaSeries;
+
 const App = () => {
 
   // Sigma stuff
   const config = useConfig();
   const sigmaData = useElementData(config.source);
-  
+  const ref = useRef();
   // Config is the dimensions and measures we selected for the source. 
   // They are hashed so i have to reference them in a really annoying manner by checking what is what and going from there.
   // config.dimension is an array that I need to loop through.
@@ -195,22 +197,24 @@ const App = () => {
       return arr;
     }
 
+    var sigmaObj;
+
     if (sigmaData?.[dimensions[0]]) {
       // data object 
-      var sigmaObj = {
+      sigmaObj = {
         end_time: sigmaData[config.measures[0]]
       };
       // build sigmaObj
       sigmaObj = sigmaObjectBuilder(sigmaObj);
       
       // build sigma series
-      var sigmaSeries = sigmaSeriesBuilder(sigmaObj);
-
-      console.log('Sigma Series', sigmaSeries);
+      sigmaSeries = sigmaSeriesBuilder(sigmaObj);
     }
 
-    console.log('Sigma Object', sigmaObj)
 
+    console.log('Sigma Object', sigmaObj)
+    console.log('Sigma Series', sigmaSeries);
+    
     const options = {
       series: sigmaSeries,
       tooltip: {
@@ -260,7 +264,7 @@ const App = () => {
           }
       }
     }
-  
+    return options
   }, [config, sigmaData]);
 
   // Figure out which remaining 3 columns are which. Save these values to an array.
@@ -276,11 +280,12 @@ const App = () => {
       <p>
         Dev Branch
       </p>
-      {options && 
+      {options && sigmaSeries && 
       <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
       options={options}
+      ref={ref}
     />}
     </div>
 
