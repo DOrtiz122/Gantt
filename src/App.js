@@ -239,21 +239,21 @@ const App = () => {
                   title: {
                       text: 'Work Order'
                   },
-                  categories: series.map(function (s) {
+                  categories: sigmaSeries.map(function (s) {
                       return s.name;
                   })
               }, {
                   title: {
                       text: 'Current Stage'
                   },
-                  categories: series.map(function (s) {
+                  categories: sigmaSeries.map(function (s) {
                       return s.name;
                   })
               }, {
                   title: {
                       text: 'Start'
                   },
-                  categories: series.map(function (s) {
+                  categories: sigmaSeries.map(function (s) {
                       return dateFormat('%e. %b', s.start);
                   })
               }]
