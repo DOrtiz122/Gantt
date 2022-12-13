@@ -165,11 +165,11 @@ const App = () => {
   // config.dimension is an array that I need to loop through.
   // config.measures also an array of length 1. it contains the string value key for the end times. 
   // The strategy here is to know for sure what one of these key values is, thanks to the hashing
-  console.log(config);
+  // console.log(config);
   
   // sigmaData is the object of arrays that contain data. The key value is each one of the values from 
-  console.log(sigmaData);
-  console.log(series);
+  // console.log(sigmaData);
+  // console.log(series);
 
   const options = useMemo(() => {
     const dimensions = config.dimension;
@@ -209,7 +209,7 @@ const App = () => {
       sigmaObjectBuilder();
     }
 
-    console.log(sigmaObj)
+    console.log('Sigma Object', sigmaObj)
 
     const options = {
       series: series,
@@ -263,13 +263,6 @@ const App = () => {
   
   }, [config, sigmaData]);
 
-
-  // const end_times = sigmaData[config.measures[0]];
-
-  // so end_times here should be exactly those end times we get inputted
-  // console.log(sigmaObj.end_time);
-
-
   // Figure out which remaining 3 columns are which. Save these values to an array.
   // var wonos, operation, start_times;
   // look through config.dimension array to do this.
@@ -281,7 +274,7 @@ const App = () => {
   return (
     <div>
       <p>
-        Hello
+        Dev Branch
       </p>
       {options && 
       <HighchartsReact
