@@ -10,7 +10,7 @@ import Highcharts from 'highcharts/highcharts-gantt';
 import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
-import { client, useConfig, useElementColumns, useElementData } from "@sigmacomputing/plugin";
+import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
 
 // configure this for sigma
 client.config.configureEditorPanel([
