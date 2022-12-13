@@ -84,7 +84,7 @@ series = cars.map(function (car, i) {
   };
 });
 
-var sigmaSeries;
+var sigmaSeries = null;
 
 const App = () => {
 
