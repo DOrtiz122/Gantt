@@ -11,6 +11,7 @@ import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
 import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
+import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
 
 // configure this for sigma
 client.config.configureEditorPanel([
@@ -149,7 +150,8 @@ const App = () => {
           id: 'wono-' + wono_count.toString(),
           name: obj.operation[0],
           start: obj.start_time[0],
-          end: obj.start_time[0]
+          end: obj.start_time[0],
+          y: wono_count
         }]
       };
       while (i < obj.wono.length) {
@@ -169,7 +171,8 @@ const App = () => {
               id: 'wono-' + wono_count.toString(),
               name: obj.operation[i],
               start: obj.start_time[i],
-              end: obj.end_time[i]
+              end: obj.end_time[i],
+              y: wono_count
             }]
           }
           // reset prev_wono
@@ -182,7 +185,8 @@ const App = () => {
             id: 'wono-' + wono_count.toString(),
             name: obj.operation[i],
             start: obj.start_time[i],
-            end: obj.end_time[i]
+            end: obj.end_time[i],
+            y: wono_count
           }
           // add the new data object to the array
           newObj.data.push(dataObj);
