@@ -222,7 +222,7 @@ const App = () => {
     const options = {
       series: sigmaSeries,
       tooltip: {
-        pointFormat: '<span>Rented To: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+        pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
       },
       // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
       navigator: {
@@ -233,7 +233,7 @@ const App = () => {
       },
       rangeSelector: {
         enabled: true,
-        selected: 0
+        // selected: 0
       },
   
       // This below keeps an indicator line for the current time
