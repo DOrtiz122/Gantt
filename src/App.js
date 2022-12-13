@@ -27,76 +27,6 @@ var today = new Date(),
     cars;
 
 today = today.getTime();
-console.log('HELLO');
-
-var input_gantt_data = {
-  operation: [
-    "CUT-CNC",
-    "FINAL INSPECTION",
-    "INPROCESS INSPECT",
-    "LABEL-PRINT",
-    "PACKAGING",
-    "QA_FAI",
-    "RINSE-ULTRASONIC",
-    "TEST-HE LEAK",
-    "WELD-UHP ORBITAL"
-  ],
-  wono: [
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304'
-  ],
-  wono_start_datetime: [
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000
-  ],
-  op_start_datetime: [
-    1665578756000, 
-    1666289067000, 
-    1666192095000, 
-    1666193098000, 
-    1666273932000, 
-    1667323519000, 
-    1665599789000, 
-    1666192225000, 
-    1666191841000
-  ],
-  op_end_datetime: [
-    1665579897000, 
-    1666291831000, 
-    1666192129000, 
-    1666193403000, 
-    1666273967000, 
-    1668010223000, 
-    1665599932000, 
-    1666192314000, 
-    1666191879000
-  ],
-  op_duration: [
-    1141, 
-    2764, 
-    34, 
-    305, 
-    35, 
-    686704, 
-    143, 
-    89, 
-    38
-  ]
-}
 
 // THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
 
@@ -177,18 +107,13 @@ const App = () => {
 
     if (!(dimensions && measures)) return false;
 
-    // data object 
-    var sigmaObj = {
-      end_time: sigmaData[config.measures[0]]
-    }
-
     // build data object first
-    const sigmaObjectBuilder = () => {
+    const sigmaObjectBuilder = (obj) => {
       for (var i = 0; i < config.dimension.length; i++) {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
           // this is start_times
-          sigmaObj.start_time = sigmaData[config.dimension[i]];
+          obj.start_time = sigmaData[config.dimension[i]];
         } else {
           // it is either wono or operation
           // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
@@ -196,25 +121,100 @@ const App = () => {
           var temp = parseInt(first_val);
           if (first_val === '00' + temp.toString()) {
             // this is wono bc the values are the same before and after, meaning it was an int
-            sigmaObj.wono = sigmaData[config.dimension[i]];
+            obj.wono = sigmaData[config.dimension[i]];
           } else {
             // not the same before and after, therefor it was a string operation
-            sigmaObj.operation = sigmaData[config.dimension[i]];
+            obj.operation = sigmaData[config.dimension[i]];
           }
         }
       }
+
+      return obj;
+    }
+
+    // process data object to be series array
+    const sigmaSeriesBuilder = (obj) => {
+      // debugger;
+      let arr = [];
+    
+      let i = 1;
+      let wono_count = 0;
+      
+      let prev_wono = obj.wono[0];
+      let newObj = {
+        name: prev_wono,
+        data: [{
+          id: 'wono-' + wono_count.toString(),
+          name: obj.operation[0],
+          start: obj.start_time[0],
+          end: obj.start_time[0]
+        }]
+      };
+      while (i < obj.wono.length) {
+    
+        let curr_wono = obj.wono[i];
+        if (prev_wono !== curr_wono) {
+          // this means we will move to the next wono object
+          // so we need to push the current series obj to arr 
+          // and reset it to {name: wono}
+    
+          // increase wono_count
+          wono_count++;
+          arr.push(newObj);
+          newObj = {
+            name: curr_wono,
+            data: [{
+              id: 'wono-' + wono_count.toString(),
+              name: obj.operation[i],
+              start: obj.start_time[i],
+              end: obj.end_time[i]
+            }]
+          }
+          // reset prev_wono
+          prev_wono = curr_wono;
+      
+        } else {
+          // we are in the same wono still
+          // so we want to add to the data key
+          let dataObj = {
+            id: 'wono-' + wono_count.toString(),
+            name: obj.operation[i],
+            start: obj.start_time[i],
+            end: obj.end_time[i]
+          }
+          // add the new data object to the array
+          newObj.data.push(dataObj);
+        }
+    
+        i++;
+      }
+    
+      // push last newObj to the arr
+      arr.push(newObj)
+      // return output array
+      return arr;
     }
 
     if (sigmaData?.[dimensions[0]]) {
-      sigmaObjectBuilder();
+      // data object 
+      var sigmaObj = {
+        end_time: sigmaData[config.measures[0]]
+      };
+      // build sigmaObj
+      sigmaObj = sigmaObjectBuilder(sigmaObj);
+      
+      // build sigma series
+      var sigmaSeries = sigmaSeriesBuilder(sigmaObj);
+
+      console.log('Sigma Series', sigmaSeries);
     }
 
     console.log('Sigma Object', sigmaObj)
 
     const options = {
-      series: series,
+      series: sigmaSeries,
       tooltip: {
-        pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+        pointFormat: '<span>Rented To: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
       },
       // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
       navigator: {
@@ -247,14 +247,14 @@ const App = () => {
                       text: 'Current Stage'
                   },
                   categories: series.map(function (s) {
-                      return s.current.rentedTo;
+                      return s.name;
                   })
               }, {
                   title: {
                       text: 'Start'
                   },
                   categories: series.map(function (s) {
-                      return dateFormat('%e. %b', s.current.from);
+                      return dateFormat('%e. %b', s.start);
                   })
               }]
           }
