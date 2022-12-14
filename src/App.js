@@ -171,7 +171,7 @@ const App = () => {
   }
 
   const sigmaOptionsBuilder = () => {
-    if (sigSeries.length > 0) {
+    // if (sigSeries.length > 0) {
       setOps({
         // chart: {
         //   type: "xrange"
@@ -203,7 +203,7 @@ const App = () => {
           uniqueNames: true,
         }
       })
-    }
+    // }
   }
 
   // useEffect 
