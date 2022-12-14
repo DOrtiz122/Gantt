@@ -162,7 +162,8 @@ const App = () => {
             // parent task
             name: prev_wono,
             id: 'wono-' + wono_count.toString(),
-            pointWidth: 3
+            pointWidth: 3,
+            y: wono_count
           })
         }
         
@@ -183,7 +184,8 @@ const App = () => {
           newObj.data.push({
             name: curr_wono,
             id: 'wono-' + wono_count.toString(),
-            pointWidth: 3
+            pointWidth: 3,
+            y: wono_count
           })
         } else {
           // we are in the same wono still
@@ -192,7 +194,8 @@ const App = () => {
             parent: 'wono-' + wono_count.toString(),
             name: obj.operation[i],
             start: obj.start_time[i],
-            end: obj.end_time[i]
+            end: obj.end_time[i],
+            y: wono_count
           }
           // add the new data object to the array
           newObj.data.push(dataObj);
