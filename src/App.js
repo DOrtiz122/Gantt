@@ -211,10 +211,10 @@ const App = () => {
 
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     console.log('set sig obj', sigObj);
-    setSigSeries(() => sigmaSeriesBuilder(sigObj));
-    console.log('set sig series', sigSeries);
-    sigmaOptionsBuilder();
-
+    setSigSeries(() => {
+      sigmaSeriesBuilder(sigObj)
+      .then(() => sigmaOptionsBuilder())
+    });
   }, [config, sigmaData] );
 
   // const options = useMemo(() => {
@@ -391,7 +391,7 @@ const App = () => {
       <p>
         refactor branch
       </p>
-      {Object.keys(ops).length > 0 && sigSeries.length > 0 && 
+      {Object.keys(ops).length > 0 && 
       <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
