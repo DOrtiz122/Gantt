@@ -232,9 +232,9 @@ const App = () => {
     
     if (sigmaSeries) {
       const options = {
-        chart: {
-          type: "xrange"
-        },
+        // chart: {
+        //   type: "xrange"
+        // },
         series: sigmaSeries,
         // series: [{ data: sigmaSeries }],
         tooltip: {
@@ -243,7 +243,7 @@ const App = () => {
         // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
         navigator: {
           enabled: true,
-          series: { type: "xrange"}
+          // series: { type: "xrange"}
         },
         scrollbar: {
           enabled: true
