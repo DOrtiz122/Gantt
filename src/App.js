@@ -156,7 +156,7 @@ const App = () => {
             name: prev_wono,
             data: [],
             // maybe remove below
-            y: wono_count
+            // y: wono_count
           }
     
           // I also want to add to this data array the parent object
@@ -164,7 +164,7 @@ const App = () => {
             name: prev_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
-            y: wono_count
+            // y: wono_count
           })
         }
         
@@ -178,7 +178,7 @@ const App = () => {
             name: curr_wono,
             data: [],
             // maybe remove below
-            y: wono_count
+            // y: wono_count
           }
           // reset prev_wono
           prev_wono = curr_wono;
@@ -188,7 +188,7 @@ const App = () => {
             name: curr_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
-            y: wono_count
+            // y: wono_count
           })
         } else {
           // we are in the same wono still
@@ -198,7 +198,7 @@ const App = () => {
             name: obj.operation[i],
             start: obj.start_time[i],
             end: obj.end_time[i],
-            y: wono_count
+            // y: wono_count
           }
           // add the new data object to the array
           newObj.data.push(dataObj);
