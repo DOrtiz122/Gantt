@@ -49,6 +49,7 @@ const App = () => {
 
   const config = useConfig();
   const sigmaData = useElementData(config.source);
+  const ref = useRef();
 
 
   // object builder and array builder functions
@@ -388,12 +389,12 @@ const App = () => {
       <p>
         refactor branch
       </p>
-      {Object.keys(ops).length > 0 && 
+      {ops && 
       <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
       options={ops}
-      // ref={ref}
+      ref={ref}
     />}
     </div>
   );
