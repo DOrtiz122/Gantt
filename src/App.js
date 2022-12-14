@@ -43,7 +43,7 @@ const App = () => {
   // create state for the options object
   // sigmaObject is build by an ASYNC process for fetching data
   // sigmaSeries is built by a SYNC process bc all the data has been fetched already
-  var [ops, setOps] = useState({});
+  var [options, setOps] = useState({});
   var [sigObj, setSigObj] = useState({});
   var [sigSeries, setSigSeries] = useState([]);
 
@@ -389,11 +389,11 @@ const App = () => {
       <p>
         refactor branch
       </p>
-      {ops && 
+      {options && 
       <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
-      options={ops}
+      options={options.series}
       ref={ref}
     />}
     </div>
