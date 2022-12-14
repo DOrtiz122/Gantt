@@ -569,7 +569,7 @@ const App = () => {
       var newOptions = {
         series: sigmaSeries,
         tooltip: {
-          pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+          pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M %P}</span><br/><span>To: {point.end:%e. %b %I:%M %P}</span>'
         },
         // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
         navigator: {
