@@ -257,18 +257,22 @@ const App = () => {
         xAxis: {
             currentDateIndicator: true
         },
+        // yAxis: {
+        //     type: 'category',
+        //     grid: {
+        //         columns: [{
+        //             title: {
+        //                 text: 'Work Order'
+        //             },
+        //             categories: sigmaSeries.map(function (s) {
+        //                 return s.name;
+        //             })
+        //         }]
+        //     }
+        // }
         yAxis: {
-            type: 'category',
-            grid: {
-                columns: [{
-                    title: {
-                        text: 'Work Order'
-                    },
-                    categories: sigmaSeries.map(function (s) {
-                        return s.name;
-                    })
-                }]
-            }
+          type: 'treegrid',
+          uniqueNames: true
         }
       }
       return options
