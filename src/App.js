@@ -270,13 +270,6 @@ const App = () => {
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
-          grid: {
-            columns: [{
-              title: {
-                text: 'Work Order'
-              }
-            }]
-          }
         }
       }
       return options
