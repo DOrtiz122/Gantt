@@ -230,42 +230,45 @@ const App = () => {
     console.log('Sigma Object', sigmaObj)
     console.log('Sigma Series', sigmaSeries);
     
-    const options = {
-      series: sigmaSeries,
-      tooltip: {
-        pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
-      },
-      // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
-      navigator: {
-        enabled: true
-      },
-      scrollbar: {
-        enabled: true
-      },
-      rangeSelector: {
-        enabled: true,
-        // selected: 0
-      },
-  
-      // This below keeps an indicator line for the current time
-      xAxis: {
-          currentDateIndicator: true
-      },
-      yAxis: {
-          type: 'category',
-          grid: {
-              columns: [{
-                  title: {
-                      text: 'Work Order'
-                  },
-                  categories: sigmaSeries.map(function (s) {
-                      return s.name;
-                  })
-              }]
-          }
+    if (!sigmaSeries) {
+      const options = {
+        series: sigmaSeries,
+        tooltip: {
+          pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+        },
+        // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
+        navigator: {
+          enabled: true
+        },
+        scrollbar: {
+          enabled: true
+        },
+        rangeSelector: {
+          enabled: true,
+          // selected: 0
+        },
+    
+        // This below keeps an indicator line for the current time
+        xAxis: {
+            currentDateIndicator: true
+        },
+        yAxis: {
+            type: 'category',
+            grid: {
+                columns: [{
+                    title: {
+                        text: 'Work Order'
+                    },
+                    categories: sigmaSeries.map(function (s) {
+                        return s.name;
+                    })
+                }]
+            }
+        }
       }
+      return options
     }
-    return options
+    
   }, [config, sigmaData]);
 
   // Figure out which remaining 3 columns are which. Save these values to an array.
