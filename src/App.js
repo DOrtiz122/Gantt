@@ -258,9 +258,9 @@ const App = () => {
                   title: {
                       text: 'Work Order'
                   },
-                  // categories: sigmaSeries.map(function (s) {
-                  //     return s.name;
-                  // })
+                  categories: sigmaSeries.map(function (s) {
+                      return s.name;
+                  })
               }]
           }
       }
