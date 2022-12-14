@@ -173,7 +173,7 @@ const App = () => {
 
   const sigmaOptionsBuilder = (sigSeries) => {
     // if (sigSeries.length > 0) {
-      setOps({
+      return ({
         // chart: {
         //   type: "xrange"
         // },
