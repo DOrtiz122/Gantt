@@ -553,6 +553,9 @@ const App = () => {
     if (sigmaData?.[dimensions[0]]) {
       // build data object so we can parse it
       sigmaObj = sigmaObjectBuilder({});
+
+      // make sure sigmaObj is in the correct order (done by lining up the start_times)
+
       
       // build sigma series
       sigmaSeries = sigmaSeriesBuilder(sigmaObj);
@@ -597,9 +600,6 @@ const App = () => {
 
   return (
     <div id="main-div">
-      <p>
-        refactor Branch
-      </p>
       {options && sigmaSeries && 
       <HighchartsReact
       highcharts={Highcharts}
