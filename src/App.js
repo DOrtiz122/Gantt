@@ -154,12 +154,13 @@ const App = () => {
           prev_wono = obj.wono[i];
           newObj = {
             name: prev_wono,
-            data: []
+            data: [],
+            // maybe remove below
+            y: wono_count
           }
     
           // I also want to add to this data array the parent object
           newObj.data.push({
-            // parent task
             name: prev_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
@@ -175,7 +176,9 @@ const App = () => {
           arr.push(newObj);
           newObj = {
             name: curr_wono,
-            data: []
+            data: [],
+            // maybe remove below
+            y: wono_count
           }
           // reset prev_wono
           prev_wono = curr_wono;
