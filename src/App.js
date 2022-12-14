@@ -44,8 +44,8 @@ const App = () => {
   // sigmaObject is build by an ASYNC process for fetching data
   // sigmaSeries is built by a SYNC process bc all the data has been fetched already
 
-  const config = useConfig();
-  const sigmaData = useElementData(config.source);
+  var config = useConfig();
+  var sigmaData = useElementData(config.source);
   // const ref = useRef();
 
 
@@ -210,7 +210,7 @@ const App = () => {
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     setSigSeries(() => sigmaSeriesBuilder(sigObj));
     setOps(() => sigmaOptionsBuilder(sigSeries));
-  }, [config, sigmaData, sigObj] );
+  }, [config, sigmaData] ); // adding sigObj sort of works
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
