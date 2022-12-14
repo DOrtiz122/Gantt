@@ -210,7 +210,7 @@ const App = () => {
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     setSigSeries(() => sigmaSeriesBuilder(sigObj));
     setOps(() => sigmaOptionsBuilder(sigSeries));
-  }, [sigSeries] ); // adding sigObj sort of works [config, sigmaData]
+  }, [] ); // adding sigObj sort of works [config, sigmaData]
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
