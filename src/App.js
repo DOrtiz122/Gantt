@@ -230,7 +230,7 @@ const App = () => {
     console.log('Sigma Object', sigmaObj)
     console.log('Sigma Series', sigmaSeries);
     
-    if (!sigmaSeries) {
+    if (sigmaSeries) {
       const options = {
         series: sigmaSeries,
         tooltip: {
