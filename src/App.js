@@ -43,13 +43,17 @@ const App = () => {
   // create state for the options object
   // sigmaObject is build by an ASYNC process for fetching data
   // sigmaSeries is built by a SYNC process bc all the data has been fetched already
+
+  const config = useConfig();
+  const sigmaData = useElementData(config.source);
+  // const ref = useRef();
+
+
   var [options, setOps] = useState({});
   var [sigObj, setSigObj] = useState({});
   var [sigSeries, setSigSeries] = useState([]);
 
-  const config = useConfig();
-  const sigmaData = useElementData(config.source);
-  const ref = useRef();
+
 
 
   // object builder and array builder functions
@@ -172,39 +176,32 @@ const App = () => {
   }
 
   const sigmaOptionsBuilder = (sigSeries) => {
-    // if (sigSeries.length > 0) {
-      return ({
-        // chart: {
-        //   type: "xrange"
-        // },
-        series: sigSeries,
-        // series: [{ data: sigmaSeries }],
-        tooltip: {
-          pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
-        },
-        // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
-        navigator: {
-          enabled: true,
-          // series: { type: "xrange"}
-        },
-        scrollbar: {
-          enabled: true
-        },
-        rangeSelector: {
-          enabled: true,
-          // selected: 0
-        },
-    
-        // This below keeps an indicator line for the current time
-        xAxis: {
-            // currentDateIndicator: true
-        },
-        yAxis: {
-          type: 'treegrid',
-          uniqueNames: true,
-        }
-      })
-    // }
+    return ({
+      series: sigSeries,
+      tooltip: {
+        pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+      },
+      // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
+      navigator: {
+        enabled: true,
+        // series: { type: "xrange"}
+      },
+      scrollbar: {
+        enabled: true
+      },
+      rangeSelector: {
+        enabled: true,
+        // selected: 0
+      },
+      // This below keeps an indicator line for the current time
+      xAxis: {
+          // currentDateIndicator: true
+      },
+      yAxis: {
+        type: 'treegrid',
+        uniqueNames: true,
+      }
+    })
   }
 
   // useEffect 
@@ -213,7 +210,7 @@ const App = () => {
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     setSigSeries(() => sigmaSeriesBuilder(sigObj));
     setOps(() => sigmaOptionsBuilder(sigSeries));
-  }, [config, sigmaData] );
+  }, [config, sigmaData, sigObj] );
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
@@ -393,8 +390,8 @@ const App = () => {
       <HighchartsReact
       highcharts={Highcharts}
       constructorType={"ganttChart"}
-      options={options.series}
-      ref={ref}
+      options={options}
+      // ref={ref}
     />}
     </div>
   );
