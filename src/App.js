@@ -232,13 +232,18 @@ const App = () => {
     
     if (sigmaSeries) {
       const options = {
-        series: sigmaSeries,
+        chart: {
+          type: "xrange"
+        },
+        // series: sigmaSeries,
+        series: [{ data: sigmaSeries }],
         tooltip: {
           pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
         },
         // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
         navigator: {
-          enabled: true
+          enabled: true,
+          series: { type: "xrange"}
         },
         scrollbar: {
           enabled: true
@@ -271,14 +276,6 @@ const App = () => {
     
   }, [config, sigmaData]);
 
-  // Figure out which remaining 3 columns are which. Save these values to an array.
-  // var wonos, operation, start_times;
-  // look through config.dimension array to do this.
-  // ask if sigmaData[config.dimension[i]][0] is a string or int. if it is a string, it is either operation or wono. if it is not a string, it is start time
-  
-  // nice thing is these are in order so we shouldn't have to worry about lining these back up 
-
-  
   return (
     <div>
       <p>
