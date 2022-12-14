@@ -57,6 +57,8 @@ const App = () => {
     const dimensions = config.dimension;
     const measures = config.measures;
 
+    console.log('dimensions', dimensions);
+    console.log('measures', measures)
 
     let obj = {};
 
