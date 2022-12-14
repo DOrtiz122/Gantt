@@ -47,6 +47,9 @@ const App = () => {
   var [sigObj, setSigObj] = useState({});
   var [sigSeries, setSigSeries] = useState([]);
 
+  const config = useConfig();
+  const sigmaData = useElementData(config.source);
+
 
   // object builder and array builder functions
   // build data object first
@@ -159,8 +162,8 @@ const App = () => {
   // async stuff
 
   const Connector = async () => {
-    const config = await useConfig();
-    const sigmaData = await useElementData(config.source);
+    // const config = await useConfig();
+    // const sigmaData = await useElementData(config.source);
 
 
     // now I want to use sigmaObjectBuilder and sigmaSeriesBuilder to create these
@@ -211,7 +214,7 @@ const App = () => {
     .then(() => {
       sigmaOptionsBuilder();
     })
-  }, [sigObj, sigSeries] ) // [config, sigmaData]
+  }, [config, sigmaData] ) // [config, sigmaData]
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
