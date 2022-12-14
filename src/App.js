@@ -170,7 +170,7 @@ const App = () => {
     return arr;
   }
 
-  const sigmaOptionsBuilder = () => {
+  const sigmaOptionsBuilder = (sigSeries) => {
     // if (sigSeries.length > 0) {
       setOps({
         // chart: {
@@ -210,11 +210,8 @@ const App = () => {
   useEffect(() => {
 
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
-    console.log('set sig obj', sigObj);
-    setSigSeries(() => {
-      sigmaSeriesBuilder(sigObj)
-      .then(() => sigmaOptionsBuilder())
-    });
+    setSigSeries(() => sigmaSeriesBuilder(sigObj));
+    setOps(() => sigmaOptionsBuilder(sigSeries));
   }, [config, sigmaData] );
 
   // const options = useMemo(() => {
