@@ -136,70 +136,71 @@ const App = () => {
     }
 
     // process data object to be series array
-    const sigmaSeriesBuilder = (obj) => {
+    var sigmaSeriesBuilder = (obj) => {
       // debugger;
       let arr = [];
     
-      let i = 1;
+      let i = 0;
       let wono_count = 0;
+    
+      // declare prev_wono outside
+      let prev_wono;
+      let newObj;
       
-      let prev_wono = obj.wono[0];
-      let newObj = {
-        name: prev_wono,
-        data: [{
-          id: 'wono-' + wono_count.toString(),
-          name: obj.operation[0],
-          start: obj.start_time[0],
-          end: obj.start_time[0],
-          y: wono_count
-        }]
-      };
       while (i < obj.wono.length) {
     
-        let curr_wono = obj.wono[i];
-        if (prev_wono !== curr_wono) {
-          // this means we will move to the next wono object
-          // so we need to push the current series obj to arr 
-          // and reset it to {name: wono}
+        // base case for the first wono
+        if (!prev_wono) {
+          prev_wono = obj.wono[i];
+          newObj = {
+            name: prev_wono,
+            data: []
+          }
     
-          // increase wono_count
+          // I also want to add to this data array the parent object
+          newObj.data.push({
+            // parent task
+            name: prev_wono,
+            id: 'wono-' + wono_count.toString()
+          })
+        }
+        
+        let curr_wono = obj.wono[i];
+        // if prev wono and curr_wono are different,
+        // we are at a new wono
+        if (prev_wono !== curr_wono) {
           wono_count++;
           arr.push(newObj);
           newObj = {
             name: curr_wono,
-            data: [{
-              id: 'wono-' + wono_count.toString(),
-              name: obj.operation[i],
-              start: obj.start_time[i],
-              end: obj.end_time[i],
-              y: wono_count
-            }]
+            data: []
           }
           // reset prev_wono
           prev_wono = curr_wono;
-      
+    
+          // Add the parent object to newObj data array
+          newObj.data.push({
+            name: curr_wono,
+            id: 'wono-' + wono_count.toString()
+          })
         } else {
           // we are in the same wono still
           // so we want to add to the data key
           let dataObj = {
-            id: 'wono-' + wono_count.toString(),
+            parent: 'wono-' + wono_count.toString(),
             name: obj.operation[i],
             start: obj.start_time[i],
-            end: obj.end_time[i],
-            y: wono_count
+            end: obj.end_time[i]
           }
           // add the new data object to the array
           newObj.data.push(dataObj);
+          i++;
         }
-    
-        i++;
       }
     
       // push last newObj to the arr
       arr.push(newObj)
-      // return output array
-
-      
+    
       return arr;
     }
 
