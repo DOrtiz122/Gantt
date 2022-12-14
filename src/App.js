@@ -170,80 +170,52 @@ const App = () => {
     return arr;
   }
 
-  // async stuff
-
-  // const Connector = async () => {
-  //   console.log('in Connector');
-  //   // const config = await useConfig();
-  //   // console.log('Config',config);
-  //   // const sigmaData = await useElementData(config.source);
-  //   // console.log('sigmaData', sigmaData);
-  
-
-
-  //   // now I want to use sigmaObjectBuilder and sigmaSeriesBuilder to create these
-  //   // object builder
-  //   setSigObj(() => sigmaObjectBuilder(sigmaData, config));
-
-  //   console.log('set sig obj');
-
-  //   // series builder
-  //   setSigSeries(() => sigmaSeriesBuilder(sigObj));
-  //   console.log('set sig series');
-  // }
-
   const sigmaOptionsBuilder = () => {
-    setOps({
-      // chart: {
-      //   type: "xrange"
-      // },
-      series: sigSeries,
-      // series: [{ data: sigmaSeries }],
-      tooltip: {
-        pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
-      },
-      // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
-      navigator: {
-        enabled: true,
-        // series: { type: "xrange"}
-      },
-      scrollbar: {
-        enabled: true
-      },
-      rangeSelector: {
-        enabled: true,
-        // selected: 0
-      },
-  
-      // This below keeps an indicator line for the current time
-      xAxis: {
-          // currentDateIndicator: true
-      },
-      yAxis: {
-        type: 'treegrid',
-        uniqueNames: true,
-      }
-    })
+    if (sigSeries.length > 0) {
+      setOps({
+        // chart: {
+        //   type: "xrange"
+        // },
+        series: sigSeries,
+        // series: [{ data: sigmaSeries }],
+        tooltip: {
+          pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
+        },
+        // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
+        navigator: {
+          enabled: true,
+          // series: { type: "xrange"}
+        },
+        scrollbar: {
+          enabled: true
+        },
+        rangeSelector: {
+          enabled: true,
+          // selected: 0
+        },
+    
+        // This below keeps an indicator line for the current time
+        xAxis: {
+            // currentDateIndicator: true
+        },
+        yAxis: {
+          type: 'treegrid',
+          uniqueNames: true,
+        }
+      })
+    }
   }
 
   // useEffect 
   useEffect(() => {
-    // console.log('in use effect');
-    // Connector()
-    // .then(() => {
-    //   console.log('we have made connection and hopefully received data and build series')
-    // })
-    // .then((data) => {
-    //   console.log('data', data);
-    //   sigmaOptionsBuilder();
-    // })
 
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     console.log('set sig obj', sigObj);
     setSigSeries(() => sigmaSeriesBuilder(sigObj));
     console.log('set sig series', sigSeries);
+    sigmaOptionsBuilder();
 
-  }, [config, sigmaData] ) // [config, sigmaData]
+  }, [config, sigmaData] );
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
