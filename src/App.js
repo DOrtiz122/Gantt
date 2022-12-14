@@ -235,8 +235,8 @@ const App = () => {
         chart: {
           type: "xrange"
         },
-        // series: sigmaSeries,
-        series: [{ data: sigmaSeries }],
+        series: sigmaSeries,
+        // series: [{ data: sigmaSeries }],
         tooltip: {
           pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
         },
