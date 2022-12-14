@@ -47,8 +47,8 @@ const App = () => {
   var [sigObj, setSigObj] = useState({});
   var [sigSeries, setSigSeries] = useState([]);
 
-  // const config = useConfig();
-  // const sigmaData = useElementData(config.source);
+  const config = useConfig();
+  const sigmaData = useElementData(config.source);
 
 
   // object builder and array builder functions
@@ -161,24 +161,25 @@ const App = () => {
 
   // async stuff
 
-  const Connector = async () => {
-    console.log('in Connector');
-    const config = await useConfig();
-    console.log('Config',config);
-    const sigmaData = await useElementData(config.source);
-    console.log('sigmaData', sigmaData);
+  // const Connector = async () => {
+  //   console.log('in Connector');
+  //   // const config = await useConfig();
+  //   // console.log('Config',config);
+  //   // const sigmaData = await useElementData(config.source);
+  //   // console.log('sigmaData', sigmaData);
+  
 
 
-    // now I want to use sigmaObjectBuilder and sigmaSeriesBuilder to create these
-    // object builder
-    setSigObj(() => sigmaObjectBuilder(sigmaData, config));
+  //   // now I want to use sigmaObjectBuilder and sigmaSeriesBuilder to create these
+  //   // object builder
+  //   setSigObj(() => sigmaObjectBuilder(sigmaData, config));
 
-    console.log('set sig obj');
+  //   console.log('set sig obj');
 
-    // series builder
-    setSigSeries(() => sigmaSeriesBuilder(sigObj));
-    console.log('set sig series');
-  }
+  //   // series builder
+  //   setSigSeries(() => sigmaSeriesBuilder(sigObj));
+  //   console.log('set sig series');
+  // }
 
   const sigmaOptionsBuilder = () => {
     setOps({
@@ -216,16 +217,22 @@ const App = () => {
 
   // useEffect 
   useEffect(() => {
-    console.log('in use effect');
-    Connector()
-    .then(() => {
-      console.log('we have made connection and hopefully received data and build series')
-    })
-    .then((data) => {
-      console.log('data', data);
-      sigmaOptionsBuilder();
-    })
-  }, [sigObj, sigSeries] ) // [config, sigmaData]
+    // console.log('in use effect');
+    // Connector()
+    // .then(() => {
+    //   console.log('we have made connection and hopefully received data and build series')
+    // })
+    // .then((data) => {
+    //   console.log('data', data);
+    //   sigmaOptionsBuilder();
+    // })
+
+    setSigObj(() => sigmaObjectBuilder(sigmaData, config));
+    console.log('set sig obj', sigObj);
+    setSigSeries(() => sigmaSeriesBuilder(sigObj));
+    console.log('set sig series', sigSeries);
+
+  }, [config, sigmaData] ) // [config, sigmaData]
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
