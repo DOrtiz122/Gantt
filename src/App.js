@@ -252,21 +252,8 @@ const App = () => {
     
         // This below keeps an indicator line for the current time
         xAxis: {
-            currentDateIndicator: true
+            // currentDateIndicator: true
         },
-        // yAxis: {
-        //     type: 'category',
-        //     grid: {
-        //         columns: [{
-        //             title: {
-        //                 text: 'Work Order'
-        //             },
-        //             categories: sigmaSeries.map(function (s) {
-        //                 return s.name;
-        //             })
-        //         }]
-        //     }
-        // }
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
