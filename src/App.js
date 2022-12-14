@@ -592,11 +592,11 @@ const App = () => {
 
       setOptions(newOptions);
     }
-    
+
   }, [config, sigmaData]);
 
   return (
-    <div>
+    <div id="main-div">
       <p>
         refactor Branch
       </p>
