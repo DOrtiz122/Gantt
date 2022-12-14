@@ -11,7 +11,6 @@ import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
 import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
-import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
 
 // configure this for sigma
 client.config.configureEditorPanel([
@@ -20,70 +19,68 @@ client.config.configureEditorPanel([
   { name: "measures", type: "column", source: "source", allowMultiple: true },
 ]);
 
-// Set to 00:00:00:000 today
-var today = new Date(),
-    day = 1000 * 60 * 60 * 24,
-    dateFormat = Highcharts.dateFormat,
-    series,
-    cars;
+// ------------------------------------------------------------------------------------
+// This branch serves to be the refactored codebase
 
-today = today.getTime();
-
-// THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
+// The motivation for this is to:
+// 1. Have page load correctly
+// 2. input data switches reload the data and displays properly
+// 3. decrease unfamiliarity with useMemo hook
+// ------------------------------------------------------------------------------------
 
 // cars array of objects
-cars = [{
-  model: 'Nissan Leaf',
-  current: 0,
-  deals: [{
-      rentedTo: 'Lisa Star',
-      from: today - 1 * day,
-      to: today + 2 * day
-  }, {
-      rentedTo: 'Shane Long',
-      from: today - 30 * day,
-      to: today - 2 * day
-  }, {
-      rentedTo: 'Jack Coleman',
-      from: today + 5 * day,
-      to: today + 6 * day
-  }]
-}, {
-  model: 'Jaguar E-type',
-  current: 0,
-  deals: [{
-      rentedTo: 'Martin Hammond',
-      from: today - 2 * day,
-      to: today + 1 * day
-  }, {
-      rentedTo: 'Linda Jackson',
-      from: today - 2 * day,
-      to: today + 1 * day
-  }, {
-      rentedTo: 'Robert Sailor',
-      from: today + 2 * day,
-      to: today + 6 * day
-  }]
-}];
+// cars = [{
+//   model: 'Nissan Leaf',
+//   current: 0,
+//   deals: [{
+//       rentedTo: 'Lisa Star',
+//       from: today - 1 * day,
+//       to: today + 2 * day
+//   }, {
+//       rentedTo: 'Shane Long',
+//       from: today - 30 * day,
+//       to: today - 2 * day
+//   }, {
+//       rentedTo: 'Jack Coleman',
+//       from: today + 5 * day,
+//       to: today + 6 * day
+//   }]
+// }, {
+//   model: 'Jaguar E-type',
+//   current: 0,
+//   deals: [{
+//       rentedTo: 'Martin Hammond',
+//       from: today - 2 * day,
+//       to: today + 1 * day
+//   }, {
+//       rentedTo: 'Linda Jackson',
+//       from: today - 2 * day,
+//       to: today + 1 * day
+//   }, {
+//       rentedTo: 'Robert Sailor',
+//       from: today + 2 * day,
+//       to: today + 6 * day
+//   }]
+// }];
 
-// Parse car data into series.
-series = cars.map(function (car, i) {
-  var data = car.deals.map(function (deal) {
-      return {
-          id: 'deal-' + i,
-          rentedTo: deal.rentedTo,
-          start: deal.from,
-          end: deal.to,
-          y: i,
-          name: deal.rentedTo
-      };
-  });
-  return {
-      name: car.model,
-      data: data,
-      current: car.deals[car.current]
-  };
-});
+// // Parse car data into series.
+// series = cars.map(function (car, i) {
+//   var data = car.deals.map(function (deal) {
+//       return {
+//           id: 'deal-' + i,
+//           rentedTo: deal.rentedTo,
+//           start: deal.from,
+//           end: deal.to,
+//           y: i,
+//           name: deal.rentedTo
+//       };
+//   });
+//   return {
+//       name: car.model,
+//       data: data,
+//       current: car.deals[car.current]
+//   };
+// });
 
 var sigmaSeries = null;
 
