@@ -63,7 +63,7 @@ const App = () => {
 
     let obj = {};
 
-    if (dimensions && measures && sigmaData) {
+    if (dimensions && measures && Object.keys(sigmaData).length > 0) {
       for (var i = 0; i < config.dimension.length; i++) {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
