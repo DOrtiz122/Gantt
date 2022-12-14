@@ -435,7 +435,9 @@ const App = () => {
   const sigmaData = useElementData(config.source);
   const ref = useRef();
 
-  const options = useEffect(() => {
+  var [options, setOptions] = useState({});
+
+  useEffect(() => {
     const dimensions = config.dimension;
     const measures = config.measures;
 
@@ -561,7 +563,7 @@ const App = () => {
     // console.log('Sigma Series', sigmaSeries);
     // if sigmaSeries array exists, create options object
     if (sigmaSeries) {
-      const options = {
+      var newOptions = {
         series: sigmaSeries,
         tooltip: {
           pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
@@ -587,14 +589,16 @@ const App = () => {
           uniqueNames: true,
         }
       }
-      return options
+
+      setOptions(newOptions);
     }
+    
   }, [config, sigmaData]);
 
   return (
     <div>
       <p>
-        Dev Branch
+        refactor Branch
       </p>
       {options && sigmaSeries && 
       <HighchartsReact
