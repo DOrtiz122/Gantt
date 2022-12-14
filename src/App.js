@@ -44,10 +44,12 @@ const App = () => {
   // sigmaObject is build by an ASYNC process for fetching data
   // sigmaSeries is built by a SYNC process bc all the data has been fetched already
 
-  var config = useConfig();
-  var sigmaData = useElementData(config.source);
+  // var config = useConfig();
+  // var sigmaData = useElementData(config.source);
   // const ref = useRef();
 
+  var [config, setConfig] = useState(useConfig());
+  var [sigmaData, setSigmaData] = useState(useElementData(config.source));
 
   var [options, setOps] = useState({});
   var [sigObj, setSigObj] = useState({});
@@ -206,11 +208,10 @@ const App = () => {
 
   // useEffect 
   useEffect(() => {
-
     setSigObj(() => sigmaObjectBuilder(sigmaData, config));
     setSigSeries(() => sigmaSeriesBuilder(sigObj));
     setOps(() => sigmaOptionsBuilder(sigSeries));
-  }, [] ); // adding sigObj sort of works [config, sigmaData]
+  }, [config, sigmaData] ); // adding sigObj sort of works [config, sigmaData]
 
   // const options = useMemo(() => {
   //   const dimensions = config.dimension;
