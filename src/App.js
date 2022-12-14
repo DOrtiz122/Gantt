@@ -599,14 +599,16 @@ const App = () => {
   }, [config, sigmaData]);
 
   return (
-    <div style={{height: '1000px', backgroundColor: 'red'}}>
+    <div>
       {options && sigmaSeries && 
-      <HighchartsReact
-      highcharts={Highcharts}
-      constructorType={"ganttChart"}
-      options={options}
-      ref={ref}
-    />}
+        <HighchartsReact
+        highcharts={Highcharts}
+        constructorType={"ganttChart"}
+        options={options}
+        ref={ref}
+        width={'auto'}
+        height={'100px'}
+      />}
     </div>
 
   );
