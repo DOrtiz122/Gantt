@@ -103,7 +103,7 @@ const App = () => {
     // declare prev_wono outside
     let prev_wono;
     let newObj;
-    if (obj !== {}) {
+    if (Object.keys(obj).length > 0) {
       while (i < obj.wono.length) {
   
         // base case for the first wono
