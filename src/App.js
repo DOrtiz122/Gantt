@@ -58,11 +58,12 @@ const App = () => {
     const measures = config.measures;
 
     console.log('dimensions', dimensions);
-    console.log('measures', measures)
+    console.log('measures', measures);
+    console.log('sigmaData', sigmaData);
 
     let obj = {};
 
-    if (dimensions && measures) {
+    if (dimensions && measures && sigmaData) {
       for (var i = 0; i < config.dimension.length; i++) {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
