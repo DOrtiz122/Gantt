@@ -599,7 +599,7 @@ const App = () => {
   }, [config, sigmaData]);
 
   return (
-    <div style={{height: '1000px'}}>
+    <div style="height: 1000px; background-color: red;">
       {options && sigmaSeries && 
       <HighchartsReact
       highcharts={Highcharts}
