@@ -287,7 +287,7 @@ const App = () => {
   return (
     <div>
       <p>
-        Dev Branch
+        refactor branch
       </p>
       {options && sigmaSeries && 
       <HighchartsReact
