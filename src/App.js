@@ -24,7 +24,7 @@ client.config.configureEditorPanel([
 
 // THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
 // declare this globally
-// var sigmaSeries, sigmaObj = null;
+var sigmaSeries, sigmaObj = null;
 
 const App = () => {
 
@@ -32,7 +32,7 @@ const App = () => {
   const config = useConfig();
   const sigmaData = useElementData(config.source);
   const ref = useRef();
-  var sigmaSeries, sigmaObj = null;
+  // var sigmaSeries, sigmaObj = null;
 
   var [options, setOptions] = useState({});
 
@@ -178,6 +178,12 @@ const App = () => {
 
     // build the object and series 
     if (sigmaData?.[dimensions[0]]) {
+      // reset sigmaObj and sigmaSeries to null first
+      // case for when the input is switched
+      sigmaObj = null;
+      sigmaSeries = null;
+
+
       // build data object so we can parse it
       sigmaObj = sigmaObjectBuilder({});
       
@@ -218,7 +224,7 @@ const App = () => {
 
   return (
     <div>
-      {options && sigmaSeries && 
+      {options && // sigmaSeries && 
         <HighchartsReact
         highcharts={Highcharts}
         constructorType={"ganttChart"}
