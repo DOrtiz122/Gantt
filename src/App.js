@@ -602,7 +602,7 @@ const App = () => {
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
-          staticScale: 25
+          staticScale: 35
         }
       }
 
