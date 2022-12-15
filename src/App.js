@@ -24,7 +24,7 @@ client.config.configureEditorPanel([
 
 // THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
 // declare this globally
-var sigmaSeries, sigmaObj = null;
+// var sigmaSeries, sigmaObj = null;
 
 const App = () => {
 
@@ -32,6 +32,7 @@ const App = () => {
   const config = useConfig();
   const sigmaData = useElementData(config.source);
   const ref = useRef();
+  var sigmaSeries, sigmaObj = null;
 
   var [options, setOptions] = useState({});
 
@@ -207,11 +208,6 @@ const App = () => {
           type: 'treegrid',
           uniqueNames: true,
           staticScale: 35,
-          events: {
-            afterExpand: (e) => {
-              console.log(e);
-            }
-          }
         },
       }
 
