@@ -415,6 +415,7 @@ import HighchartsReact from 'highcharts-react-official';
 // Sigma packages
 import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
 import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 // configure this for sigma
 client.config.configureEditorPanel([
@@ -457,6 +458,36 @@ const App = () => {
       // check-in: obj.start_time is an array of tuples with the datetime value in [0] and starting index in [1]
       // It is now sorted from earliest to latest times and now the second value
 
+      // Sort all of the 4 input arrays the same way, according to start_times
+      // 3) combine the arrays into a single object, then push to array
+      // the only thing that matters right now is start time, we can figure out which is which later
+
+      console.log('sigmaData before', sigmaData)
+
+      var list = [];
+      for (let i = 0; i < sigmaData[config.measures[0]].length; i++) {
+        list.push({
+          start: sigmaData[config.measures[0]][i],
+          data1: sigmaData[config.dimension[0]][i],
+          data2: sigmaData[config.dimension[1]][i],
+          data3: sigmaData[config.dimension[2]][i]
+        })
+      }
+      console.log('list before', list);
+
+      // 2) Sort based on start time
+      list.sort((a, b) => a.start - b.start)
+      console.log('list after sorting', list);
+      // 3) Separate them back out
+      for (let i = 0; i < list.length; i++) {
+        sigmaData[config.measures[0]][i] = list[i].start;
+        sigmaData[config.dimension[0]][i] = list[i].data1;
+        sigmaData[config.dimension[1]][i] = list[i].data2;
+        sigmaData[config.dimension[2]][i] = list[i].data3;
+      }
+
+      console.log('sigmaData after', sigmaData)
+      
 
       // add in the last component
       obj.start_time = sigmaData[config.measures[0]];
