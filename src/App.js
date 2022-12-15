@@ -602,7 +602,7 @@ const App = () => {
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
-          staticScale: 40
+          staticScale: 200
         }
       }
 
@@ -619,8 +619,6 @@ const App = () => {
         constructorType={"ganttChart"}
         options={options}
         ref={ref}
-        width={'auto'}
-        height={'100px'}
       />}
     </div>
 
