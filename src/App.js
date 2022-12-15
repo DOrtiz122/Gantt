@@ -130,14 +130,7 @@ const App = () => {
             pointWidth: 3,
             // add start and end that change with state hopefully
             start: obj.start_time[0],
-            end: obj.end_time.at(-1),
-            events: {
-              click: (e) => {
-                console.log('clicked');
-                console.log(this);
-                console.log(e)
-              }
-            }
+            end: obj.end_time.at(-1)
           })
         }
         
@@ -218,7 +211,12 @@ const App = () => {
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
-          staticScale: 35
+          staticScale: 35,
+          events: {
+            afterExpand: (e) => {
+              console.log(e);
+            }
+          }
         },
         // plotOptions: {
         //   gantt: {
