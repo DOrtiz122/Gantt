@@ -1,8 +1,7 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Manufacturing Use Case Branch
 
-// Data input:
-// Data:
+// Data Input:
 // - Work Number
 // - Operation 
 // - Minimum Operation Start Date
