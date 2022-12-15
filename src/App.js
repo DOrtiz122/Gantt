@@ -1,11 +1,22 @@
+// ---------------------------------------------------------------------------------------------------------------------
+// Ultra Clean Tech Branch
+//
+// Data input:
+// Weldment Data:
+// - Work Number
+// - Operation 
+// - Minimum Operation Start Date
+// - Maximum Operation End Date
+
+// This was achieved via grouping and filtering in Sigma, before a child element being created which feeds into Gantt
+// ---------------------------------------------------------------------------------------------------------------------
+
 import React, { 
   useState, 
   useEffect,
-  useMemo, 
   useRef } from 'react';
 
 // Highcharts packages
-// import Highcharts from 'highcharts';
 import Highcharts from 'highcharts/highcharts-gantt';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -22,17 +33,14 @@ client.config.configureEditorPanel([
 ]);
 
 
-// THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
-// declare this globally
+
 var sigmaSeries, sigmaObj = null;
 
 const App = () => {
 
-  // Sigma stuff
   const config = useConfig();
   const sigmaData = useElementData(config.source);
   const ref = useRef();
-  // var sigmaSeries, sigmaObj = null;
 
   var [options, setOptions] = useState({});
 
@@ -79,8 +87,7 @@ const App = () => {
       for (var i = 0; i < config.dimension.length; i++) {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
-          // this is start_times
-          // obj.start_time = sigmaData[config.dimension[i]];
+          // this is end_times
           obj.end_time = sigmaData[config.dimension[i]];
         } else {
           // it is either wono or operation
@@ -120,8 +127,6 @@ const App = () => {
           newObj = {
             name: prev_wono,
             data: [],
-            // maybe remove below
-            // y: wono_count
           }
     
           // Parent Object in the array
@@ -129,7 +134,6 @@ const App = () => {
             name: prev_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
-            // add start and end that change with state hopefully
             start: obj.start_time[0],
             end: obj.end_time.at(-1)
           })
@@ -200,7 +204,6 @@ const App = () => {
         tooltip: {
           pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%b %e, %I:%M %P}</span><br/><span>To: {point.end:%b %e, %I:%M %P}</span>'
         },
-        // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
         navigator: {
           enabled: true,
         },
