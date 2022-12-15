@@ -448,23 +448,11 @@ const App = () => {
     // build data object first
     const sigmaObjectBuilder = (obj) => {
 
-      // I need to sort obj.start_time and use that to sort the other columns as well
-      // 1st: make the array of numbers an array of tuples with the index as the second val
-      // obj.start_time.map((val, i) => [val, i]);
-
-      // 2nd: sort obj.start_time so it goes from first time to last time
-      // obj.start_time.sort((a, b) => a[0] - b[0]);
-
-      // check-in: obj.start_time is an array of tuples with the datetime value in [0] and starting index in [1]
-      // It is now sorted from earliest to latest times and now the second value
-
       // Sort all of the 4 input arrays the same way, according to start_times
-      // 3) combine the arrays into a single object, then push to array
+      // 1) combine the arrays into a single object, then push to array
       // the only thing that matters right now is start time, we can figure out which is which later
 
-      console.log('sigmaData before', sigmaData)
-
-      var list = [];
+      let list = [];
       for (let i = 0; i < sigmaData[config.measures[0]].length; i++) {
         list.push({
           start: sigmaData[config.measures[0]][i],
@@ -473,11 +461,10 @@ const App = () => {
           data3: sigmaData[config.dimension[2]][i]
         })
       }
-      console.log('list before', list);
 
       // 2) Sort based on start time
       list.sort((a, b) => a.start - b.start)
-      console.log('list after sorting', list);
+      
       // 3) Separate them back out
       for (let i = 0; i < list.length; i++) {
         sigmaData[config.measures[0]][i] = list[i].start;
@@ -485,8 +472,6 @@ const App = () => {
         sigmaData[config.dimension[1]][i] = list[i].data2;
         sigmaData[config.dimension[2]][i] = list[i].data3;
       }
-
-      console.log('sigmaData after', sigmaData)
       
 
       // add in the last component
@@ -541,12 +526,14 @@ const App = () => {
             // y: wono_count
           }
     
-          // I also want to add to this data array the parent object
+          // Parent Object in the array
           newObj.data.push({
             name: prev_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
-            // y: wono_count
+            // add start and end that change with state hopefully
+            start: obj.start_time[0],
+            end: obj.end_time.at(-1)
           })
         }
         
