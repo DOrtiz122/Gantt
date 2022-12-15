@@ -459,7 +459,7 @@ const App = () => {
 
 
       // add in the last component
-      // obj.start_time = sigmaData[config.measures[0]];
+      obj.start_time = sigmaData[config.measures[0]];
 
       // This is the actual object builder
       for (var i = 0; i < config.dimension.length; i++) {
