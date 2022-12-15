@@ -579,9 +579,6 @@ const App = () => {
     // if sigmaSeries array exists, create options object
     if (sigmaSeries) {
       var newOptions = {
-        chart: {
-          minHeight: 300
-        },
         series: sigmaSeries,
         tooltip: {
           pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%b %e, %I:%M %P}</span><br/><span>To: {point.end:%b %e, %I:%M %P}</span>'
@@ -605,6 +602,7 @@ const App = () => {
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
+          staticScale: 40
         }
       }
 
