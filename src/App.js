@@ -446,6 +446,22 @@ const App = () => {
 
     // build data object first
     const sigmaObjectBuilder = (obj) => {
+
+      // I need to sort obj.start_time and use that to sort the other columns as well
+      // 1st: make the array of numbers an array of tuples with the index as the second val
+      // obj.start_time.map((val, i) => [val, i]);
+
+      // 2nd: sort obj.start_time so it goes from first time to last time
+      // obj.start_time.sort((a, b) => a[0] - b[0]);
+
+      // check-in: obj.start_time is an array of tuples with the datetime value in [0] and starting index in [1]
+      // It is now sorted from earliest to latest times and now the second value
+
+
+      // add in the last component
+      // obj.start_time = sigmaData[config.measures[0]];
+
+      // This is the actual object builder
       for (var i = 0; i < config.dimension.length; i++) {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
@@ -467,15 +483,12 @@ const App = () => {
         }
       }
 
-      // add in the last component
-      obj.start_time = sigmaData[config.measures[0]];
-
       return obj;
     }
 
     // process data object to be series array
     var sigmaSeriesBuilder = (obj) => {
-      // debugger;
+      
       let arr = [];
     
       let i = 0;
