@@ -594,16 +594,39 @@ const App = () => {
           enabled: true,
           // selected: 0
         },
-    
-        // This below keeps an indicator line for the current time
-        xAxis: {
-            // currentDateIndicator: true
-        },
         yAxis: {
           type: 'treegrid',
           uniqueNames: true,
           staticScale: 35
+        },
+        plotOptions: {
+          gantt: {
+            point: {
+              events: {
+                click: (e) => {
+                  console.log('clicked');
+                  console.log(this);
+                  console.log(e)
+                }
+              }
+            }
+          }
         }
+
+        // need to create a function to shrink the parent back down to the same size
+        // chart: {
+        //   height: 1 // Need this first default value otherwise it doesn't work
+        // },
+        // function(newOptions) {
+        //   // 50 is a pixel value for one cell
+        //   // might need to change this to yAxis instead
+        //   let chartHeight = 50 * newOptions.series[0].data.length;
+        //   newOptions.update({
+        //     chart: {
+        //       height: chartHeight
+        //     }
+        //   })
+        // }
       }
 
       setOptions(newOptions);
