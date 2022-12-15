@@ -143,8 +143,6 @@ const App = () => {
           newObj = {
             name: curr_wono,
             data: [],
-            // maybe remove below
-            // y: wono_count
           }
           // reset prev_wono
           prev_wono = curr_wono;
@@ -154,7 +152,6 @@ const App = () => {
             name: curr_wono,
             id: 'wono-' + wono_count.toString(),
             pointWidth: 3,
-            // y: wono_count
           })
         } else {
           // we are in the same wono still
@@ -164,7 +161,6 @@ const App = () => {
             name: obj.operation[i],
             start: obj.start_time[i],
             end: obj.end_time[i],
-            // y: wono_count
           }
           // add the new data object to the array
           newObj.data.push(dataObj);
@@ -206,7 +202,6 @@ const App = () => {
         },
         rangeSelector: {
           enabled: true,
-          // selected: 0
         },
         yAxis: {
           type: 'treegrid',
@@ -218,42 +213,6 @@ const App = () => {
             }
           }
         },
-        // plotOptions: {
-        //   gantt: {
-        //     // point: {
-        //     //   events: {
-        //     //     click: (e) => {
-        //     //       console.log('clicked');
-        //     //       console.log(this);
-        //     //       console.log(e)
-        //     //     }
-        //     //   }
-        //     // },
-
-        //     events: {
-        //       click: (e) => {
-        //         console.log('clicked');
-        //         console.log(this);
-        //         console.log(e)
-        //       }
-        //     }
-        //   }
-        // }
-
-        // need to create a function to shrink the parent back down to the same size
-        // chart: {
-        //   height: 1 // Need this first default value otherwise it doesn't work
-        // },
-        // function(newOptions) {
-        //   // 50 is a pixel value for one cell
-        //   // might need to change this to yAxis instead
-        //   let chartHeight = 50 * newOptions.series[0].data.length;
-        //   newOptions.update({
-        //     chart: {
-        //       height: chartHeight
-        //     }
-        //   })
-        // }
       }
 
       setOptions(newOptions);
