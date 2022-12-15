@@ -592,9 +592,8 @@ const App = () => {
     }
 
 
-    // console.log('Sigma Object', sigmaObj)
-    // console.log('Sigma Series', sigmaSeries);
-    // if sigmaSeries array exists, create options object
+    // if sigmaSeries array exists, create options object.
+    // conditionals bc not promise based
     if (sigmaSeries) {
       var newOptions = {
         series: sigmaSeries,
@@ -619,13 +618,21 @@ const App = () => {
         },
         plotOptions: {
           gantt: {
-            point: {
-              events: {
-                click: (e) => {
-                  console.log('clicked');
-                  console.log(this);
-                  console.log(e)
-                }
+            // point: {
+            //   events: {
+            //     click: (e) => {
+            //       console.log('clicked');
+            //       console.log(this);
+            //       console.log(e)
+            //     }
+            //   }
+            // },
+
+            events: {
+              click: (e) => {
+                console.log('clicked');
+                console.log(this);
+                console.log(e)
               }
             }
           }
