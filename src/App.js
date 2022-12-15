@@ -439,7 +439,7 @@ const App = () => {
 
   useEffect(() => {
     const dimensions = config.dimension;
-    const measures = config.measures;
+    const measures = config.measures; // only start_time will be passed in
 
     // bc useConfig and useElementData aren't promise based, i can't use async/await. it needs to be conditional everything.
     if (!(dimensions && measures)) return false;
@@ -450,7 +450,8 @@ const App = () => {
         var first_val = sigmaData[config.dimension[i]][0];
         if (typeof first_val !== 'string') {
           // this is start_times
-          obj.start_time = sigmaData[config.dimension[i]];
+          // obj.start_time = sigmaData[config.dimension[i]];
+          obj.end_time = sigmaData[config.dimension[i]];
         } else {
           // it is either wono or operation
           // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
@@ -467,7 +468,7 @@ const App = () => {
       }
 
       // add in the last component
-      obj.end_time = sigmaData[config.measures[0]];
+      obj.start_time = sigmaData[config.measures[0]];
 
       return obj;
     }
@@ -549,13 +550,11 @@ const App = () => {
       return arr;
     }
 
+
     // build the object and series 
     if (sigmaData?.[dimensions[0]]) {
       // build data object so we can parse it
       sigmaObj = sigmaObjectBuilder({});
-
-      // make sure sigmaObj is in the correct order (done by lining up the start_times)
-
       
       // build sigma series
       sigmaSeries = sigmaSeriesBuilder(sigmaObj);
