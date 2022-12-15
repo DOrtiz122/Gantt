@@ -224,7 +224,7 @@ const App = () => {
 
   return (
     <div>
-      {options && // sigmaSeries && 
+      {options && sigmaSeries && 
         <HighchartsReact
         highcharts={Highcharts}
         constructorType={"ganttChart"}
