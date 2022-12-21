@@ -29,76 +29,7 @@ var today = new Date(),
 today = today.getTime();
 console.log('HELLO');
 
-var input_gantt_data = {
-  operation: [
-    "CUT-CNC",
-    "FINAL INSPECTION",
-    "INPROCESS INSPECT",
-    "LABEL-PRINT",
-    "PACKAGING",
-    "QA_FAI",
-    "RINSE-ULTRASONIC",
-    "TEST-HE LEAK",
-    "WELD-UHP ORBITAL"
-  ],
-  wono: [
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304',
-    '001000205304'
-  ],
-  wono_start_datetime: [
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000, 
-    1665566604000
-  ],
-  op_start_datetime: [
-    1665578756000, 
-    1666289067000, 
-    1666192095000, 
-    1666193098000, 
-    1666273932000, 
-    1667323519000, 
-    1665599789000, 
-    1666192225000, 
-    1666191841000
-  ],
-  op_end_datetime: [
-    1665579897000, 
-    1666291831000, 
-    1666192129000, 
-    1666193403000, 
-    1666273967000, 
-    1668010223000, 
-    1665599932000, 
-    1666192314000, 
-    1666191879000
-  ],
-  op_duration: [
-    1141, 
-    2764, 
-    34, 
-    305, 
-    35, 
-    686704, 
-    143, 
-    89, 
-    38
-  ]
-}
 
-// THIS IS THE BRANCH WHERE WILL WE CONNECT TO SIGMA DATA
 
 // cars array of objects
 cars = [{
@@ -171,85 +102,11 @@ const App = () => {
   console.log(sigmaData);
   console.log(series);
 
-  var sigmaObj = {
-    // end_time: sigmaData[config.measures[0]]
-  }
-  // const end_times = sigmaData[config.measures[0]];
-
-  // so end_times here should be exactly those end times we get inputted
-  // console.log(sigmaObj.end_time);
-
-
-  // Figure out which remaining 3 columns are which. Save these values to an array.
-  // var wonos, operation, start_times;
-  // look through config.dimension array to do this.
-  // ask if sigmaData[config.dimension[i]][0] is a string or int. if it is a string, it is either operation or wono. if it is not a string, it is start time
-  
-  // nice thing is these are in order so we shouldn't have to worry about lining these back up 
-
-  
-  
-  // for (var i = 0; i < config.dimension.length; i++) {
-  //   var first_val = sigmaData[config.dimension[i]];
-  //   console.log(first_val);
-  //   console.log(Array.isArray(first_val));
-  //   console.log(typeof first_val);
-
-  //   // if (typeof first_val['0'] !== 'string') {
-  //   //   // this is start_times
-  //   //   sigmaObj.start_time = sigmaData[config.dimension[i]];
-  //   // } else {
-  //   //   // it is either wono or operation
-  //   //   // can convert the string to a number and back to an int. if same value, it is wono. if not, it is operation.
-  //   //   // convert string # to int
-  //   //   var temp = parseInt(first_val[0]);
-  //   //   if (first_val[0] === temp.toString()) {
-  //   //     // this is wono bc the values are the same before and after, meaning it was an int
-  //   //     sigmaObj.wono = sigmaData[config.dimension[i]];
-  //   //   } else {
-  //   //     // not the same before and after, therefor it was a string operation
-  //   //     sigmaObj.operation = sigmaData[config.dimension[i]];
-  //   //   }
-  //   // }
-  // }
-
-  // console.log(sigmaObj);
-
   const [options] = useState({
-    series: series,
-
-    // Below allows the name to be inserted into the bar itself. Not necessary for right now
-  //   plotOptions: {
-  //     series: {
-  //         dataLabels: {
-  //             enabled: true,
-  //             format: '{point.name}',
-  //             style: {
-  //                 fontWeight: 'normal'
-  //             }
-  //         }
-  //     }
-  // },
+  series: series,
   tooltip: {
       pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
   },
-  // accessibility: {
-  //     keyboardNavigation: {
-  //         seriesNavigation: {
-  //             mode: 'serialize'
-  //         }
-  //     },
-  //     point: {
-  //         valueDescriptionFormat: 'Rented to {point.rentedTo} from {point.x:%A, %B %e %I:%M} to {point.x2:%A, %B %e %I:%M}.'
-  //     },
-  //     series: {
-  //         descriptionFormatter: function (series) {
-  //             return series.name + ', car ' + (series.index + 1) + ' of ' + series.chart.series.length + '.';
-  //         }
-  //     }
-  // },
-
-
   // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
   navigator: {
     enabled: true
@@ -261,7 +118,6 @@ const App = () => {
     enabled: true,
     selected: 0
   },
-
   // This below keeps an indicator line for the current time
   xAxis: {
       currentDateIndicator: true
