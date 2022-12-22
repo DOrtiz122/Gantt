@@ -1,16 +1,13 @@
 import React, { 
   useState, 
-  useEffect,
-  useMemo, 
-  useRef } from 'react';
+  useEffect } from 'react';
 
 // Highcharts packages
-// import Highcharts from 'highcharts';
-import Highcharts, { offset } from 'highcharts/highcharts-gantt';
+import Highcharts, { dateFormat } from 'highcharts/highcharts-gantt';
 import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
-import { client, useConfig, useElementColumns, useElementData } from "@sigmacomputing/plugin";
+import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
 
 // configure this for sigma
 client.config.configureEditorPanel([
@@ -20,72 +17,6 @@ client.config.configureEditorPanel([
   { name: "operation start dates", type: "column", source: "source", allowMultiple: false },
   { name: "operation end dates", type: "column", source: "source", allowMultiple: false },
 ]);
-
-// Set to 00:00:00:000 today
-var today = new Date(),
-    day = 1000 * 60 * 60 * 24,
-    dateFormat = Highcharts.dateFormat,
-    series,
-    cars;
-
-today = today.getTime();
-
-
-
-// cars array of objects
-cars = [{
-  model: 'Nissan Leaf',
-  current: 0,
-  deals: [{
-      rentedTo: 'Lisa Star',
-      from: today - 1 * day,
-      to: today + 2 * day
-  }, {
-      rentedTo: 'Shane Long',
-      from: today - 30 * day,
-      to: today - 2 * day
-  }, {
-      rentedTo: 'Jack Coleman',
-      from: today + 5 * day,
-      to: today + 6 * day
-  }]
-}, {
-  model: 'Jaguar E-type',
-  current: 0,
-  deals: [{
-      rentedTo: 'Martin Hammond',
-      from: today - 2 * day,
-      to: today + 1 * day
-  }, {
-      rentedTo: 'Linda Jackson',
-      from: today - 2 * day,
-      to: today + 1 * day
-  }, {
-      rentedTo: 'Robert Sailor',
-      from: today + 2 * day,
-      to: today + 6 * day
-  }]
-}];
-
-// Parse car data into series.
-series = cars.map(function (car, i) {
-  var data = car.deals.map(function (deal) {
-      return {
-          id: 'deal-' + i,
-          rentedTo: deal.rentedTo,
-          start: deal.from,
-          end: deal.to,
-          y: i,
-          name: deal.rentedTo
-      };
-  });
-  return {
-      name: car.model,
-      data: data,
-      current: car.deals[car.current]
-  };
-});
-
 
 const sigmaObjectBuilder = (wos, ops, starts, ends) => {
   // sort all of the input arrays the same way
@@ -129,16 +60,13 @@ const sigmaSeriesBuilder = (wos, ops, starts, ends) => {
   
   // first, get the object built and sorted properly
   const obj = sigmaObjectBuilder(wos, ops, starts, ends);
-  console.log('OBJECT OBJECT OBJECT', obj);
+
 
   // second, create the series array from this
-
   let arr = [];
-
   let i = 0;
-  let wono_count = 0;
 
-  // declare prev_wono outside
+  // declare prev_wono and newObj outside
   let prev_wono;
   let newObj;
   
@@ -152,69 +80,48 @@ const sigmaSeriesBuilder = (wos, ops, starts, ends) => {
         data: [],
       }
 
-      // Parent Object in the array
+      // Push the first item into the data array
       newObj.data.push({
-        name: prev_wono,
-        id: 'wono-' + wono_count.toString(),
+        name: 'Total Duration',
         pointWidth: 3,
         start: obj.start_time[0],
-        end: obj.end_time.at(-1)
+        end: obj.end_time.reduce((a, b) => a > b ? a : b) // get the greatest max
       })
     }
     
-    let curr_wono = obj.wono[i];
-    // if prev wono and curr_wono are different,
-    // we are at a new wono
-    if (prev_wono !== curr_wono) {
-      wono_count++;
-      arr.push(newObj);
-      newObj = {
-        name: curr_wono,
-        data: [],
-      }
-      // reset prev_wono
-      prev_wono = curr_wono;
-
-      // Add the parent object to newObj data array
-      newObj.data.push({
-        name: curr_wono,
-        id: 'wono-' + wono_count.toString(),
-        pointWidth: 3,
-      })
-    } else {
-      // we are in the same wono still
-      // so we want to add to the data key
-      let dataObj = {
-        parent: 'wono-' + wono_count.toString(),
-        name: obj.operation[i],
-        start: obj.start_time[i],
-        end: obj.end_time[i],
-      }
-      // add the new data object to the array
-      newObj.data.push(dataObj);
-      i++;
+    // Create data object that will be pushed to data array
+    let dataObj = {
+      name: obj.operation[i],
+      start: obj.start_time[i],
+      end: obj.end_time[i],
+      y: i + 1
     }
+    // add the new data object to the array
+    newObj.data.push(dataObj);
+    i++;
   }
 
   // push last newObj to the arr
   arr.push(newObj)
-
-  console.log(arr);
   return arr;
 }
 
 const getGanttPayload = (config, sigmaData) => {
-  // this is where I will actually do the bulk of the app
-  const source = config.source;
-  const key_work_orders = config['work orders'];
-  const key_operations = config['operations'];
-  const key_ops_start = config['operation start dates'];
-  const key_ops_end = config['operation end dates'];
+  // destructure config and rename the values
+  const {
+    source,
+    'work orders': key_work_orders,
+    'operations': key_operations,
+    'operation start dates': key_ops_start,
+    'operation end dates': key_ops_end
+  } = config;
 
   if (!source || !key_work_orders || !key_operations || !key_ops_start || !key_ops_end || Object.keys(sigmaData).length === 0) return null;
   
+  // build the series that will feed into the Gantt chart
   const series = sigmaSeriesBuilder(sigmaData[key_work_orders], sigmaData[key_operations], sigmaData[key_ops_start], sigmaData[key_ops_end]);
 
+  console.log('SERIES', series);
   if (series) {
     var newOptions = {
       series: series,
@@ -231,17 +138,39 @@ const getGanttPayload = (config, sigmaData) => {
         enabled: true,
       },
       yAxis: {
-        type: 'treegrid',
-        uniqueNames: true,
-        staticScale: 35,
+        type: 'category',
+        grid: {
+          columns: [{
+            title: {
+              text: 'Operation'
+            },
+            categories: series[0].data.map((s) => {
+              return s.name;
+            })
+          }, {
+            title: {
+              text: 'Operation Start'
+            }, 
+            categories: series[0].data.map((s) => {
+              return dateFormat('%b %e, %I:%M %P', s.start);
+            })
+          }, {
+            title: {
+              text: 'Operation End'
+            },
+            categories: series[0].data.map((s) => {
+              return dateFormat('%b %e, %I:%M %P', s.end);
+            })
+          }]
+        }
       },
     }
 
-    // setOptions(newOptions);
     return newOptions;
   }
 
-  return series;
+  // else, return null
+  return null;
 }
 
 // Function to check if the config file returned back data
@@ -252,36 +181,25 @@ const allDimensions = (config) => {
   return true;
 }
 
-// This will be the main function for the app.
-// In here, we will:
-// Connect to Sigma, get data, use useEffect, use useMemo, etc. 
 // Refer to https://github.com/ja2z/sigma-sample-plugins/blob/main/narrativescience-quill/src/App.js
 const useGetGanttData = () => {
   const config = useConfig();
   const sigmaData = useElementData(config.source);
-  // const payLoad = useMemo(() => getGanttPayload(config, sigmaData), [config, sigmaData]);
-  // console.log('Config', config);
-  // console.log('sigmaData', sigmaData);
   const [res, setRes] = useState(null);
 
   useEffect(() => {
-    // if (!payLoad) return null;
     if (!allDimensions(config)) return false;
 
     setRes(getGanttPayload(config, sigmaData));
-    // setRes(payLoad);
 
-    // in here I want to set Res
   }, [config, sigmaData]);
 
   return res;
 }
 
-
 // This will be the new app declaration
 const App = () => {
   const res = useGetGanttData();
-  console.log('Res is ', res);
   return (
     res && <HighchartsReact highcharts={Highcharts} constructorType={"ganttChart"} options={res}/>
   );
