@@ -6,17 +6,19 @@ import React, {
 
 // Highcharts packages
 // import Highcharts from 'highcharts';
-import Highcharts from 'highcharts/highcharts-gantt';
+import Highcharts, { offset } from 'highcharts/highcharts-gantt';
 import HighchartsReact from 'highcharts-react-official';
 
 // Sigma packages
-import { client, useConfig, useElementData } from "@sigmacomputing/plugin";
+import { client, useConfig, useElementColumns, useElementData } from "@sigmacomputing/plugin";
 
 // configure this for sigma
 client.config.configureEditorPanel([
   { name: "source", type: "element" },
-  { name: "dimension", type: "column", source: "source", allowMultiple: true },
-  { name: "measures", type: "column", source: "source", allowMultiple: true },
+  { name: "work orders", type: "column", source: "source", allowMultiple: false },
+  { name: "operations", type: "column", source: "source", allowMultiple: false },
+  { name: "operation start dates", type: "column", source: "source", allowMultiple: false },
+  { name: "operation end dates", type: "column", source: "source", allowMultiple: false },
 ]);
 
 // Set to 00:00:00:000 today
@@ -27,7 +29,6 @@ var today = new Date(),
     cars;
 
 today = today.getTime();
-console.log('HELLO');
 
 
 
@@ -85,80 +86,204 @@ series = cars.map(function (car, i) {
   };
 });
 
-const App = () => {
 
-  // Sigma stuff
+const sigmaObjectBuilder = (wos, ops, starts, ends) => {
+  // sort all of the input arrays the same way
+
+  // wos, ops, starts, ends are all ARRAYS from the
+
+  // loop through any of these by length, push to a temp array an objeect of wo, op, start, end
+  let list = [];
+  for (let i = 0; i < wos.length; i++) {
+    list.push({
+      start: starts[i],
+      end: ends[i],
+      wono: wos[i],
+      op: ops[i]
+    })
+  }
+
+  // sort it based on start time
+  list.sort((a, b) => a.start - b.start);
+
+  // separate and assign these values back to their original arrays
+  for (let i = 0; i < list.length; i++) {
+    starts[i] = list[i].start;
+    ends[i] = list[i].end;
+    wos[i] = list[i].wono;
+    ops[i] = list[i].op;
+  }
+
+  // obj = { wono, operation, start_time, end_time}. each being an array.
+  let obj = {
+    wono: wos,
+    operation: ops,
+    start_time: starts,
+    end_time: ends 
+  }
+
+  return obj;
+}
+
+const sigmaSeriesBuilder = (wos, ops, starts, ends) => {
+  
+  // first, get the object built and sorted properly
+  const obj = sigmaObjectBuilder(wos, ops, starts, ends);
+  console.log('OBJECT OBJECT OBJECT', obj);
+
+  // second, create the series array from this
+
+  let arr = [];
+
+  let i = 0;
+  let wono_count = 0;
+
+  // declare prev_wono outside
+  let prev_wono;
+  let newObj;
+  
+  while (i < obj.wono.length) {
+
+    // base case for the first wono
+    if (!prev_wono) {
+      prev_wono = obj.wono[i];
+      newObj = {
+        name: prev_wono,
+        data: [],
+      }
+
+      // Parent Object in the array
+      newObj.data.push({
+        name: prev_wono,
+        id: 'wono-' + wono_count.toString(),
+        pointWidth: 3,
+        start: obj.start_time[0],
+        end: obj.end_time.at(-1)
+      })
+    }
+    
+    let curr_wono = obj.wono[i];
+    // if prev wono and curr_wono are different,
+    // we are at a new wono
+    if (prev_wono !== curr_wono) {
+      wono_count++;
+      arr.push(newObj);
+      newObj = {
+        name: curr_wono,
+        data: [],
+      }
+      // reset prev_wono
+      prev_wono = curr_wono;
+
+      // Add the parent object to newObj data array
+      newObj.data.push({
+        name: curr_wono,
+        id: 'wono-' + wono_count.toString(),
+        pointWidth: 3,
+      })
+    } else {
+      // we are in the same wono still
+      // so we want to add to the data key
+      let dataObj = {
+        parent: 'wono-' + wono_count.toString(),
+        name: obj.operation[i],
+        start: obj.start_time[i],
+        end: obj.end_time[i],
+      }
+      // add the new data object to the array
+      newObj.data.push(dataObj);
+      i++;
+    }
+  }
+
+  // push last newObj to the arr
+  arr.push(newObj)
+
+  console.log(arr);
+  return arr;
+}
+
+const getGanttPayload = (config, sigmaData) => {
+  // this is where I will actually do the bulk of the app
+  const source = config.source;
+  const key_work_orders = config['work orders'];
+  const key_operations = config['operations'];
+  const key_ops_start = config['operation start dates'];
+  const key_ops_end = config['operation end dates'];
+
+  if (!source || !key_work_orders || !key_operations || !key_ops_start || !key_ops_end || Object.keys(sigmaData).length === 0) return null;
+  
+  const series = sigmaSeriesBuilder(sigmaData[key_work_orders], sigmaData[key_operations], sigmaData[key_ops_start], sigmaData[key_ops_end]);
+
+  if (series) {
+    var newOptions = {
+      series: series,
+      tooltip: {
+        pointFormat: '<span>Operation: {point.name}</span><br/><span>From: {point.start:%b %e, %I:%M %P}</span><br/><span>To: {point.end:%b %e, %I:%M %P}</span>'
+      },
+      navigator: {
+        enabled: true,
+      },
+      scrollbar: {
+        enabled: true
+      },
+      rangeSelector: {
+        enabled: true,
+      },
+      yAxis: {
+        type: 'treegrid',
+        uniqueNames: true,
+        staticScale: 35,
+      },
+    }
+
+    // setOptions(newOptions);
+    return newOptions;
+  }
+
+  return series;
+}
+
+// Function to check if the config file returned back data
+const allDimensions = (config) => { 
+  if (!config['operations'] || !config['work orders'] || !config['operation start dates'] || !config['operation end dates']) {
+    return false;
+  }
+  return true;
+}
+
+// This will be the main function for the app.
+// In here, we will:
+// Connect to Sigma, get data, use useEffect, use useMemo, etc. 
+// Refer to https://github.com/ja2z/sigma-sample-plugins/blob/main/narrativescience-quill/src/App.js
+const useGetGanttData = () => {
   const config = useConfig();
   const sigmaData = useElementData(config.source);
-  
-  // Config is the dimensions and measures we selected for the source. 
-  // They are hashed so i have to reference them in a really annoying manner by checking what is what and going from there.
-  // config.dimension is an array that I need to loop through.
-  // config.measures also an array of length 1. it contains the string value key for the end times. 
-  // The strategy here is to know for sure what one of these key values is, thanks to the hashing
-  console.log(config);
-  
-  // sigmaData is the object of arrays that contain data. The key value is each one of the values from 
-  console.log(sigmaData);
-  console.log(series);
+  // const payLoad = useMemo(() => getGanttPayload(config, sigmaData), [config, sigmaData]);
+  // console.log('Config', config);
+  // console.log('sigmaData', sigmaData);
+  const [res, setRes] = useState(null);
 
-  const [options] = useState({
-  series: series,
-  tooltip: {
-      pointFormat: '<span>Rented To: {point.rentedTo}</span><br/><span>From: {point.start:%e. %b %I:%M}</span><br/><span>To: {point.end:%e. %b %I:%M}</span>'
-  },
-  // This right here is the range bar and navigator, which is looking great. Lots of additional customizations can be made here however
-  navigator: {
-    enabled: true
-  },
-  scrollbar: {
-    enabled: true
-  },
-  rangeSelector: {
-    enabled: true,
-    selected: 0
-  },
-  // This below keeps an indicator line for the current time
-  xAxis: {
-      currentDateIndicator: true
-  },
-  yAxis: {
-      type: 'category',
-      grid: {
-          columns: [{
-              title: {
-                  text: 'Work Order'
-              },
-              categories: series.map(function (s) {
-                  return s.name;
-              })
-          }, {
-              title: {
-                  text: 'Current Stage'
-              },
-              categories: series.map(function (s) {
-                  return s.current.rentedTo;
-              })
-          }, {
-              title: {
-                  text: 'Start'
-              },
-              categories: series.map(function (s) {
-                  return dateFormat('%e. %b', s.current.from);
-              })
-          }]
-      }
-  }
-  })
+  useEffect(() => {
+    // if (!payLoad) return null;
+    if (!allDimensions(config)) return false;
 
+    setRes(getGanttPayload(config, sigmaData));
+    // setRes(payLoad);
+
+    // in here I want to set Res
+  }, [config, sigmaData]);
+
+  return res;
+}
+
+
+// This will be the new app declaration
+const App = () => {
+  const res = useGetGanttData();
+  console.log('Res is ', res);
   return (
-    <HighchartsReact
-      highcharts={Highcharts}
-      constructorType={"ganttChart"}
-      options={options}
-    />
+    res && <HighchartsReact highcharts={Highcharts} constructorType={"ganttChart"} options={res}/>
   );
-};
-
-
+}
 export default App;
