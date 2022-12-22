@@ -20,9 +20,6 @@ client.config.configureEditorPanel([
 
 const sigmaObjectBuilder = (wos, ops, starts, ends) => {
   // sort all of the input arrays the same way
-
-  // wos, ops, starts, ends are all ARRAYS from the
-
   // loop through any of these by length, push to a temp array an objeect of wo, op, start, end
   let list = [];
   for (let i = 0; i < wos.length; i++) {
