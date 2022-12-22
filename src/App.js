@@ -52,7 +52,7 @@ const sigmaObjectBuilder = (wos, ops, starts, ends) => {
     start_time: starts,
     end_time: ends 
   }
-
+  
   return obj;
 }
 
@@ -121,7 +121,6 @@ const getGanttPayload = (config, sigmaData) => {
   // build the series that will feed into the Gantt chart
   const series = sigmaSeriesBuilder(sigmaData[key_work_orders], sigmaData[key_operations], sigmaData[key_ops_start], sigmaData[key_ops_end]);
 
-  console.log('SERIES', series);
   if (series) {
     var newOptions = {
       series: series,
@@ -188,7 +187,7 @@ const useGetGanttData = () => {
   const [res, setRes] = useState(null);
 
   useEffect(() => {
-    if (!allDimensions(config)) return false;
+    if (!allDimensions(config)) return null;
 
     setRes(getGanttPayload(config, sigmaData));
 
